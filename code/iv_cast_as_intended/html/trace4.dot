@@ -1,0 +1,290 @@
+digraph {
+graph [ordering = out]
+edge [arrowhead = none, penwidth = 1.6, fontsize = 30]
+node [shape = point, width = 0, height = 0, fontsize = 30]
+Trace [label = <A trace has<br/>
+been found.<br/>
+>, shape = plaintext]
+P0__0 [label = "Honest Process", shape = plaintext]
+P__0 [label = "Attacker", shape = plaintext]
+Trace -> P0__0 [label = "", style = invisible, weight = 100]{rank = same; P0__0 P__0}
+P0__0 -> P0__1 [label = <>, weight = 100]
+P0__1 [label = "!", shape = ellipse]
+P0_0__1 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
+P0__1 -> P0_0__1 [label = <>, weight = 100]
+P0_0__1 -> P0_0__2 [label = <>, weight = 100]
+P0_0__2 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{2}</FONT><FONT COLOR="blue">new </FONT>vmsecretkey_1</TD></TR></TABLE>>]
+P0_0__2 -> P0_0__3 [label = <>, weight = 100]
+P0_0__3 -> P0_0__4 [label = <>, weight = 100]
+P__0 -> P__1 [label = <>, weight = 100]
+{rank = same; P__1 P0_0__4}
+P0_0__4 -> P0_0__5 [label = <>, weight = 100]
+P__1 -> P__2 [label = <>, weight = 100]
+{rank = same; P__2 P0_0__5}
+P0_0__5 -> P__2 [label = <~M = signedPublicKey(vmsecretkey_1)>, arrowhead = normal]
+P0_0__5 -> P0_0__6 [label = <>, weight = 100]
+P__2 -> P__3 [label = <>, weight = 100]
+{rank = same; P__3 P0_0__6}
+P0_0__6 -> P0_0__7 [label = <>, weight = 100]
+P0_0__7 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{5}</FONT><FONT COLOR="blue">new </FONT>trgsecretkey_1</TD></TR></TABLE>>]
+P0_0__7 -> P0_0__8 [label = <>, weight = 100]
+P0_0__8 -> P0_0__9 [label = <>, weight = 100]
+P__3 -> P__4 [label = <>, weight = 100]
+{rank = same; P__4 P0_0__9}
+P0_0__9 -> P0_0__10 [label = <>, weight = 100]
+P__4 -> P__5 [label = <>, weight = 100]
+{rank = same; P__5 P0_0__10}
+P0_0__10 -> P__5 [label = <~M_1 = signedPublicKey(trgsecretkey_1)>, arrowhead = normal]
+P0_0__10 -> P0_0__11 [label = <>, weight = 100]
+P__5 -> P__6 [label = <>, weight = 100]
+{rank = same; P__6 P0_0__11}
+P0_0__11 -> P0_0__12 [label = <>, weight = 100]
+P0_0__12 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{8}</FONT><FONT COLOR="blue">new </FONT>bbsecretkey_1</TD></TR></TABLE>>]
+P0_0__12 -> P0_0__13 [label = <>, weight = 100]
+P0_0__13 -> P0_0__14 [label = <>, weight = 100]
+P__6 -> P__7 [label = <>, weight = 100]
+{rank = same; P__7 P0_0__14}
+P0_0__14 -> P0_0__15 [label = <>, weight = 100]
+P__7 -> P__8 [label = <>, weight = 100]
+{rank = same; P__8 P0_0__15}
+P0_0__15 -> P__8 [label = <~M_2 = signedPublicKey(bbsecretkey_1)>, arrowhead = normal]
+P0_0__15 -> P0_0__16 [label = <>, weight = 100]
+P__8 -> P__9 [label = <>, weight = 100]
+{rank = same; P__9 P0_0__16}
+P0_0__16 -> P0_0__17 [label = <>, weight = 100]
+P0_0__17 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{11}</FONT><FONT COLOR="blue">new </FONT>vsecretkey_1</TD></TR></TABLE>>]
+P0_0__17 -> P0_0__18 [label = <>, weight = 100]
+P0_0__18 -> P0_0__19 [label = <>, weight = 100]
+P__9 -> P__10 [label = <>, weight = 100]
+{rank = same; P__10 P0_0__19}
+P0_0__19 -> P0_0__20 [label = <>, weight = 100]
+P__10 -> P__11 [label = <>, weight = 100]
+{rank = same; P__11 P0_0__20}
+P0_0__20 -> P__11 [label = <~M_3 = signedPublicKey(vsecretkey_1)>, arrowhead = normal]
+P0_0__20 -> P0_0__21 [label = <>, weight = 100]
+P__11 -> P__12 [label = <>, weight = 100]
+{rank = same; P__12 P0_0__21}
+P0_0__21 -> P0_0__22 [label = <>, weight = 100]
+P0_0__22 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{14}</FONT><FONT COLOR="blue">new </FONT>channelvoterandva_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{15}</FONT><FONT COLOR="blue">new </FONT>channelvoterandtrg_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{16}</FONT><FONT COLOR="blue">new </FONT>channeltrgandmachine_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{17}</FONT><FONT COLOR="blue">new </FONT>channelvaprep_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{18}</FONT><FONT COLOR="blue">new </FONT>channelvareceipts_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{19}</FONT><FONT COLOR="blue">new </FONT>channeltrgandtest_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{20}</FONT><FONT COLOR="blue">new </FONT>channelvoterandtest_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{21}</FONT><FONT COLOR="blue">new </FONT>channelBBandTest_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{22}</FONT><FONT COLOR="blue">new </FONT>channelVAandTest_2</TD></TR></TABLE>>]
+P0_0__22 -> P0_0__23 [label = <>, weight = 100]
+P0_0__23 [label = "!", shape = ellipse]
+P0_0_0__23 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
+P0_0__23 -> P0_0_0__23 [label = <>, weight = 100]
+P0_0_0__23 -> P0_0_0__24 [label = <>, weight = 100]
+P0_0_0__24 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{24}</FONT><FONT COLOR="blue">new </FONT>sessionidv_3</TD></TR></TABLE>>]
+P0_0_0__24 -> P0_0_0__25 [label = <>, weight = 100]
+P0_0_0__25 -> P0_0_0__26 [label = <>, weight = 100]
+P__12 -> P__13 [label = <>, weight = 100]
+{rank = same; P__13 P0_0_0__26}
+P0_0_0__26 -> P0_0_0__27 [label = <>, weight = 100]
+P__13 -> P__14 [label = <>, weight = 100]
+{rank = same; P__14 P0_0_0__27}
+P0_0_0__27 -> P__14 [label = <~M_4 = sessionidv_3>, arrowhead = normal]
+P0_0_0__27 -> P0_0_0__28 [label = <>, weight = 100]
+P__14 -> P__15 [label = <>, weight = 100]
+{rank = same; P__15 P0_0_0__28}
+/*RPar */
+P0_0_0__28 -> P0_0_0_4__28 [label = <>]
+P0_0_0__28 -> P0_0_0_3__28 [label = <>]
+P0_0_0__28 -> P0_0_0_2__28 [label = <>]
+P0_0_0__28 -> P0_0_0_1__28 [label = <>]
+P0_0_0__28 -> P0_0_0_0__28 [label = <>]
+P0_0_0__28 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
+{rank = same; P0_0_0_0__28 P0_0_0_1__28 P0_0_0_2__28 P0_0_0_3__28 P0_0_0_4__28}
+P0_0_0_0__28 -> P0_0_0_0__29 [label = <>, weight = 100]
+P0_0_0_0__29 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">test</FONT></TD></TR></TABLE>>]
+P0_0_0_0__29 -> P0_0_0_0__30 [label = <>, weight = 100]
+P0_0_0_1__28 -> P0_0_0_1__29 [label = <>, weight = 100]
+P0_0_0_1__29 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">Bulletin</FONT></TD></TR></TABLE>>]
+P0_0_0_1__29 -> P0_0_0_1__30 [label = <>, weight = 100]
+P0_0_0_2__28 -> P0_0_0_2__29 [label = <>, weight = 100]
+P0_0_0_2__29 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">Voter</FONT></TD></TR><TR><TD><FONT COLOR="darkgreen">{91}</FONT><FONT COLOR="blue">event</FONT> VoterChoice(candidate0,sessionidv_3)<br/>
+</TD></TR></TABLE>>]
+P0_0_0_2__29 -> P0_0_0_2__30 [label = <>, weight = 100]
+P0_0_0_3__28 -> P0_0_0_3__29 [label = <>, weight = 100]
+P0_0_0_3__29 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">TRG</FONT></TD></TR><TR><TD><FONT COLOR="darkgreen">{80}</FONT><FONT COLOR="blue">new </FONT>freshRandomNumber_4</TD></TR></TABLE>>]
+P0_0_0_3__29 -> P0_0_0_3__30 [label = <>, weight = 100]
+P0_0_0_4__28 -> P0_0_0_4__29 [label = <>, weight = 100]
+P0_0_0_4__29 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">VotingAuthority</FONT></TD></TR><TR><TD><FONT COLOR="darkgreen">{33}</FONT><FONT COLOR="blue">new </FONT>rand1rand1_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{34}</FONT><FONT COLOR="blue">new </FONT>rand1Candidate1_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{35}</FONT><FONT COLOR="blue">new </FONT>rand2rand2_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{36}</FONT><FONT COLOR="blue">new </FONT>rand2Candidate2_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{37}</FONT><FONT COLOR="blue">new </FONT>dummyRandomNumber1_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{38}</FONT><FONT COLOR="blue">new </FONT>dummyRandomNumber2_1</TD></TR></TABLE>>]
+P0_0_0_4__29 -> P0_0_0_4__30 [label = <>, weight = 100]
+P0_0_0_2__30 -> P0_0_0_2__31 [label = <>, weight = 100]
+P0_0_0_1__30 -> P0_0_0_1__31 [label = <>, weight = 100]
+P0_0_0_0__30 -> P0_0_0_0__31 [label = <>, weight = 100]
+P__15 -> P__16 [label = <>, weight = 100]
+{rank = same; P__16 P0_0_0_0__31 P0_0_0_1__31 P0_0_0_2__31}
+P0_0_0_2__31 -> P0_0_0_2__32 [label = <>, weight = 100]
+P__16 -> P__17 [label = <>, weight = 100]
+{rank = same; P__17 P0_0_0_2__32}
+P0_0_0_2__32 -> P__17 [label = <(a_2,a_3,a_4,~M_4) = (a_2,a_3,a_4,sessionidv_3)>, dir = back, arrowhead = normal]
+P0_0_0_2__32 -> P0_0_0_2__33 [label = <>, weight = 100]
+P0_0_0_1__31 -> P0_0_0_1__32 [label = <>, weight = 100]
+P0_0_0_0__31 -> P0_0_0_0__32 [label = <>, weight = 100]
+P__17 -> P__18 [label = <>, weight = 100]
+{rank = same; P__18 P0_0_0_0__32 P0_0_0_1__32 P0_0_0_2__33}
+P0_0_0_4__30 -> P0_0_0_4__31 [label = <>, weight = 100]
+P0_0_0_3__30 -> P0_0_0_3__31 [label = <>, weight = 100]
+P0_0_0_2__33 -> P0_0_0_2__34 [label = <>, weight = 100]
+P0_0_0_1__32 -> P0_0_0_1__33 [label = <>, weight = 100]
+{rank = same; P0_0_0_1__33 P0_0_0_2__34 P0_0_0_3__31 P0_0_0_4__31}
+P0_0_0_4__31 -> P0_0_0_4__32 [label = <>, weight = 100]
+P0_0_0_1__33 -> P0_0_0_1__34 [label = <>, weight = 100]
+{rank = same; P0_0_0_1__34 P0_0_0_4__32}
+P0_0_0_4__32 -> P0_0_0_1__34 [label = <~X_1>, arrowhead = normal]
+P0_0_0_4__32 -> P0_0_0_4__33 [label = <>, weight = 100]
+P0_0_0_3__31 -> P0_0_0_3__32 [label = <>, weight = 100]
+P0_0_0_2__34 -> P0_0_0_2__35 [label = <>, weight = 100]
+P0_0_0_1__34 -> P0_0_0_1__35 [label = <>, weight = 100]
+{rank = same; P0_0_0_1__35 P0_0_0_2__35 P0_0_0_3__32 P0_0_0_4__33}
+P0_0_0_1__35 -> P0_0_0_1__36 [label = <>, weight = 100]
+P0_0_0_0__32 -> P0_0_0_0__33 [label = <>, weight = 100]
+P__18 -> P__19 [label = <>, weight = 100]
+{rank = same; P__19 P0_0_0_0__33 P0_0_0_1__36}
+P0_0_0_1__36 -> P0_0_0_1__37 [label = <>, weight = 100]
+P__19 -> P__20 [label = <>, weight = 100]
+{rank = same; P__20 P0_0_0_1__37}
+P0_0_0_1__37 -> P__20 [label = <(~M_5,~M_6,~M_7,~M_8)>, arrowhead = normal]
+P0_0_0_1__37 -> P0_0_0_1__38 [label = <>, weight = 100]
+P0_0_0_0__33 -> P0_0_0_0__34 [label = <>, weight = 100]
+P__20 -> P__21 [label = <>, weight = 100]
+{rank = same; P__21 P0_0_0_0__34 P0_0_0_1__38}
+P0_0_0_4__33 -> P0_0_0_4__34 [label = <>, weight = 100]
+P0_0_0_3__32 -> P0_0_0_3__33 [label = <>, weight = 100]
+P0_0_0_2__35 -> P0_0_0_2__36 [label = <>, weight = 100]
+{rank = same; P0_0_0_2__36 P0_0_0_3__33 P0_0_0_4__34}
+P0_0_0_4__34 -> P0_0_0_4__35 [label = <>, weight = 100]
+P0_0_0_2__36 -> P0_0_0_2__37 [label = <>, weight = 100]
+{rank = same; P0_0_0_2__37 P0_0_0_4__35}
+P0_0_0_4__35 -> P0_0_0_2__37 [label = <sign((candidate0,sessionidv_3),vsecretkey_1)>, dir = back, arrowhead = normal]
+P0_0_0_4__35 -> P0_0_0_4__36 [label = <>, weight = 100]
+P0_0_0_3__33 -> P0_0_0_3__34 [label = <>, weight = 100]
+P0_0_0_2__37 -> P0_0_0_2__38 [label = <>, weight = 100]
+{rank = same; P0_0_0_2__38 P0_0_0_3__34 P0_0_0_4__36}
+P0_0_0_4__36 -> P0_0_0_4__37 [label = <>, weight = 100]
+P0_0_0_3__34 -> P0_0_0_3__35 [label = <>, weight = 100]
+{rank = same; P0_0_0_3__35 P0_0_0_4__37}
+P0_0_0_4__37 -> P0_0_0_4__38 [label = <>, weight = 100]
+P0_0_0_3__35 -> P0_0_0_3__36 [label = <>, weight = 100]
+{rank = same; P0_0_0_3__36 P0_0_0_4__38}
+P0_0_0_4__38 -> P0_0_0_3__36 [label = <sign((freshRandomNumber_4,sessionidv_3),trgsecretkey_1)>, dir = back, arrowhead = normal]
+P0_0_0_4__38 -> P0_0_0_4__39 [label = <>, weight = 100]
+P0_0_0_3__36 -> P0_0_0_3__37 [label = <>, weight = 100]
+{rank = same; P0_0_0_3__37 P0_0_0_4__39}
+P0_0_0_4__39 -> P0_0_0_4__40 [label = <>, weight = 100]
+P0_0_0_3__37 -> P0_0_0_3__38 [label = <>, weight = 100]
+{rank = same; P0_0_0_3__38 P0_0_0_4__40}
+P0_0_0_4__40 -> P0_0_0_4__41 [label = <>, weight = 100]
+P0_0_0_3__38 -> P0_0_0_3__39 [label = <>, weight = 100]
+{rank = same; P0_0_0_3__39 P0_0_0_4__41}
+P0_0_0_4__41 -> P0_0_0_3__39 [label = <freshRandomNumber_4>, arrowhead = normal]
+P0_0_0_4__41 -> P0_0_0_4__42 [label = <>, weight = 100]
+P0_0_0_3__39 -> P0_0_0_3__40 [label = <>, weight = 100]
+{rank = same; P0_0_0_3__40 P0_0_0_4__42}
+P0_0_0_4__42 -> P0_0_0_4__43 [label = <>, weight = 100]
+P0_0_0_4__43 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{53}</FONT><FONT COLOR="blue">new </FONT>barCode_1</TD></TR></TABLE>>]
+P0_0_0_4__43 -> P0_0_0_4__44 [label = <>, weight = 100]
+P0_0_0_3__40 -> P0_0_0_3__41 [label = <>, weight = 100]
+P0_0_0_2__38 -> P0_0_0_2__39 [label = <>, weight = 100]
+{rank = same; P0_0_0_2__39 P0_0_0_3__41}
+P0_0_0_3__41 -> P0_0_0_3__42 [label = <>, weight = 100]
+P0_0_0_2__39 -> P0_0_0_2__40 [label = <>, weight = 100]
+{rank = same; P0_0_0_2__40 P0_0_0_3__42}
+P0_0_0_3__42 -> P0_0_0_2__40 [label = <sign((freshRandomNumber_4,sessionidv_3),trgsecretkey_1)>, arrowhead = normal]
+P0_0_0_3__42 -> P0_0_0_3__43 [label = <>, weight = 100]
+P0_0_0_2__40 -> P0_0_0_2__41 [label = <>, weight = 100]
+{rank = same; P0_0_0_2__41 P0_0_0_3__43}
+P0_0_0_2__41 -> P0_0_0_2__42 [label = <>, weight = 100]
+P0_0_0_1__38 -> P0_0_0_1__39 [label = <>, weight = 100]
+P0_0_0_0__34 -> P0_0_0_0__35 [label = <>, weight = 100]
+P__21 -> P__22 [label = <>, weight = 100]
+{rank = same; P__22 P0_0_0_0__35 P0_0_0_1__39 P0_0_0_2__42}
+P0_0_0_2__42 -> P0_0_0_2__43 [label = <>, weight = 100]
+P__22 -> P__23 [label = <>, weight = 100]
+{rank = same; P__23 P0_0_0_2__43}
+P0_0_0_2__43 -> P__23 [label = <~M_9 = freshRandomNumber_4>, arrowhead = normal]
+P0_0_0_2__43 -> P0_0_0_2__44 [label = <>, weight = 100]
+P0_0_0_1__39 -> P0_0_0_1__40 [label = <>, weight = 100]
+P0_0_0_0__35 -> P0_0_0_0__36 [label = <>, weight = 100]
+P__23 -> P__24 [label = <>, weight = 100]
+{rank = same; P__24 P0_0_0_0__36 P0_0_0_1__40 P0_0_0_2__44}
+P0_0_0_4__44 -> P0_0_0_4__45 [label = <>, weight = 100]
+P0_0_0_3__43 -> P0_0_0_3__44 [label = <>, weight = 100]
+P0_0_0_2__44 -> P0_0_0_2__45 [label = <>, weight = 100]
+{rank = same; P0_0_0_2__45 P0_0_0_3__44 P0_0_0_4__45}
+P0_0_0_4__45 -> P0_0_0_4__46 [label = <>, weight = 100]
+P0_0_0_2__45 -> P0_0_0_2__46 [label = <>, weight = 100]
+{rank = same; P0_0_0_2__46 P0_0_0_4__46}
+P0_0_0_4__46 -> P0_0_0_2__46 [label = <sign((candidate0,candidate1,freshRandomNumber_4,<br/>
+dummyRandomNumber2_1,barCode_1,sessionidv_3),vmsecretkey_1)>, arrowhead = normal]
+P0_0_0_4__46 -> P0_0_0_4__47 [label = <>, weight = 100]
+P0_0_0_3__44 -> P0_0_0_3__45 [label = <>, weight = 100]
+P0_0_0_2__46 -> P0_0_0_2__47 [label = <>, weight = 100]
+{rank = same; P0_0_0_2__47 P0_0_0_3__45 P0_0_0_4__47}
+P0_0_0_2__47 -> P0_0_0_2__48 [label = <>, weight = 100]
+P0_0_0_2__48 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{101}</FONT><FONT COLOR="blue">event</FONT> OKv(freshRandomNumber_4,candidate0,<br/>
+sessionidv_3)</TD></TR></TABLE>>]
+P0_0_0_2__48 -> P0_0_0_2__49 [label = <>, weight = 100]
+P0_0_0_3__45 -> P0_0_0_3__46 [label = <>, weight = 100]
+P0_0_0_2__49 -> P0_0_0_2__50 [label = <>, weight = 100]
+P0_0_0_1__40 -> P0_0_0_1__41 [label = <>, weight = 100]
+P0_0_0_0__36 -> P0_0_0_0__37 [label = <>, weight = 100]
+{rank = same; P0_0_0_0__37 P0_0_0_1__41 P0_0_0_2__50 P0_0_0_3__46}
+P0_0_0_3__46 -> P0_0_0_3__47 [label = <>, weight = 100]
+P0_0_0_0__37 -> P0_0_0_0__38 [label = <>, weight = 100]
+{rank = same; P0_0_0_0__38 P0_0_0_3__47}
+P0_0_0_3__47 -> P0_0_0_0__38 [label = <(sign((freshRandomNumber_4,sessionidv_3),trgsecretkey_1),<br/>
+sessionidv_3)>, arrowhead = normal]
+P0_0_0_3__47 -> P0_0_0_3__48 [label = <>, weight = 100]
+P0_0_0_2__50 -> P0_0_0_2__51 [label = <>, weight = 100]
+P0_0_0_1__41 -> P0_0_0_1__42 [label = <>, weight = 100]
+P0_0_0_0__38 -> P0_0_0_0__39 [label = <>, weight = 100]
+{rank = same; P0_0_0_0__39 P0_0_0_1__42 P0_0_0_2__51 P0_0_0_3__48}
+P0_0_0_3__49 [label = "", width = 0.3, height = 0.3]
+P0_0_0_3__48 -> P0_0_0_3__49 [label = <>, weight = 100]
+P0_0_0_2__51 -> P0_0_0_2__52 [label = <>, weight = 100]
+P0_0_0_1__42 -> P0_0_0_1__43 [label = <>, weight = 100]
+P0_0_0_0__39 -> P0_0_0_0__40 [label = <>, weight = 100]
+{rank = same; P0_0_0_0__40 P0_0_0_1__43 P0_0_0_2__52}
+P0_0_0_2__52 -> P0_0_0_2__53 [label = <>, weight = 100]
+P0_0_0_0__40 -> P0_0_0_0__41 [label = <>, weight = 100]
+{rank = same; P0_0_0_0__41 P0_0_0_2__53}
+P0_0_0_2__53 -> P0_0_0_0__41 [label = <~X_2>, arrowhead = normal]
+P0_0_0_2__53 -> P0_0_0_2__54 [label = <>, weight = 100]
+P0_0_0_1__43 -> P0_0_0_1__44 [label = <>, weight = 100]
+P0_0_0_0__41 -> P0_0_0_0__42 [label = <>, weight = 100]
+{rank = same; P0_0_0_0__42 P0_0_0_1__44 P0_0_0_2__54}
+P0_0_0_4__47 -> P0_0_0_4__48 [label = <>, weight = 100]
+P0_0_0_3__50 [label = "", style = invisible]
+P0_0_0_3__49 -> P0_0_0_3__50 [label = <>, weight = 100, style = invisible]
+P0_0_0_2__54 -> P0_0_0_2__55 [label = <>, weight = 100]
+P0_0_0_1__44 -> P0_0_0_1__45 [label = <>, weight = 100]
+P0_0_0_0__42 -> P0_0_0_0__43 [label = <>, weight = 100]
+{rank = same; P0_0_0_0__43 P0_0_0_1__45 P0_0_0_2__55 P0_0_0_3__50 P0_0_0_4__48}
+P0_0_0_4__48 -> P0_0_0_4__49 [label = <>, weight = 100]
+P0_0_0_0__43 -> P0_0_0_0__44 [label = <>, weight = 100]
+{rank = same; P0_0_0_0__44 P0_0_0_4__49}
+P0_0_0_4__49 -> P0_0_0_0__44 [label = <(sign((sign((candidate0,sessionidv_3),vsecretkey_1),<br/>
+barCode_1),vmsecretkey_1),sessionidv_3)>, arrowhead = normal]
+P0_0_0_4__49 -> P0_0_0_4__50 [label = <>, weight = 100]
+P0_0_0_3__51 [label = "", style = invisible]
+P0_0_0_3__50 -> P0_0_0_3__51 [label = <>, weight = 100, style = invisible]
+P0_0_0_2__55 -> P0_0_0_2__56 [label = <>, weight = 100]
+P0_0_0_1__45 -> P0_0_0_1__46 [label = <>, weight = 100]
+P0_0_0_0__44 -> P0_0_0_0__45 [label = <>, weight = 100]
+{rank = same; P0_0_0_0__45 P0_0_0_1__46 P0_0_0_2__56 P0_0_0_3__51 P0_0_0_4__50}
+P0_0_0_0__45 -> P0_0_0_0__46 [label = <>, weight = 100]
+P0_0_0_0__46 [color = red, shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{134}</FONT><FONT COLOR="blue">event</FONT> OKt(freshRandomNumber_4,candidate0,<br/>
+sessionidv_3)</TD></TR></TABLE>>]
+P0_0_0_0__46 -> P0_0_0_0__47 [label = <>, weight = 100]
+Abbrev [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR> <TD> Abbreviations </TD></TR><TR><TD>~X_1 = (dummyVotePair(commitValue(dummyRandomNumber1_1,<br/>
+rand1rand1_1),commitValue(candidate0,rand1Candidate1_1)),<br/>
+dummyVotePair(commitValue(dummyRandomNumber2_1,<br/>
+rand2rand2_1),commitValue(candidate1,rand2Candidate2_1)),<br/>
+pzk1(candidate0,candidate1,rand1Candidate1_1,rand2Candidate2_1,<br/>
+commitValue(candidate0,rand1Candidate1_1),commitValue(<br/>
+candidate1,rand2Candidate2_1)),sessionidv_3)</TD></TR><TR><TD>~M_5 = dummyVotePair(commitValue(dummyRandomNumber1_1,<br/>
+rand1rand1_1),commitValue(candidate0,rand1Candidate1_1))</TD></TR><TR><TD>~M_6 = dummyVotePair(commitValue(dummyRandomNumber2_1,<br/>
+rand2rand2_1),commitValue(candidate1,rand2Candidate2_1))</TD></TR><TR><TD>~M_7 = pzk1(candidate0,candidate1,rand1Candidate1_1,<br/>
+rand2Candidate2_1,commitValue(candidate0,rand1Candidate1_1),<br/>
+commitValue(candidate1,rand2Candidate2_1))</TD></TR><TR><TD>~M_8 = sessionidv_3</TD></TR><TR><TD>~X_2 = (candidate0,sign((candidate0,candidate1,freshRandomNumber_4,<br/>
+dummyRandomNumber2_1,barCode_1,sessionidv_3),vmsecretkey_1),<br/>
+sessionidv_3)</TD></TR></TABLE>>]Abbrev -> P__0 [style = invisible, weight =100]}

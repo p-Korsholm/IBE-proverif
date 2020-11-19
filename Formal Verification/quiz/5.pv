@@ -1,0 +1,99 @@
+channel c. 
+free d: channel[private].
+
+type key. 
+type pkey.
+type skey. 
+type host. 
+
+fun enc(bitstring, key) : bitstring. 
+reduc forall x: bitstring, y:key; dec(enc(x, y), y) = x. 
+
+fun h(bitstring): bitstring.
+
+fun pk(skey): pkey.
+
+fun aenc(bitstring, pkey): bitstring. 
+reduc forall x:bitstring, y:skey; adec(aenc(x, pk(y)), y) = x.
+
+fun pkey2B(pkey): bitstring[typeConverter].
+fun B2pkey(bitstring): pkey[typeConverter].
+
+fun nonce2Key(bitstring): key[typeConverter].
+
+fun bits2Host(bitstring): host[typeConverter].
+fun host2bits(host): bitstring[typeConverter].
+
+(*
+A -> S {{A}pkB, B }Kas
+S -> B {{A}pkB } Kbs
+B -> A {Nb}pkA
+A -> B {m}Nb
+B -> A h(m)
+*)
+
+event startA(host, host, bitstring).
+event endB(host, host, bitstring).
+
+event acceptM(host, host, bitstring). 
+event endA(host, host, bitstring).
+
+(*	Authentication      *)
+query A: host, B:host, m:bitstring; 
+	inj-event (endB(A, B, m)) ==>
+		inj-event (startA(A, B, m)).
+
+(* 	Integrity	    *)
+query A: host, B:host, m:bitstring;
+	inj-event (endA(A, B, m) ) ==>
+		inj-event (acceptM(A, B, m)).
+
+(*	Confidentiality     *)
+query attacker(new m).
+
+let pA(A: host, B:host, Kas: key) =
+	new skA: skey;
+	new m: bitstring;
+	event startA(A, B, m);
+	out(c, (A, pk(skA)));
+	in(c, (=B, pkB: pkey));
+	out(c, enc((aenc(host2bits(A), pkB), pkB), Kas));
+	in(c, x : bitstring);
+	let (nB: bitstring) = adec(x, skA) in 
+	out(c, enc(m, nonce2Key(nB)));
+	in(c, y:bitstring);
+	if y = h(m) then event endA(A, B, m).
+
+let pB(B: host, Kbs: key) =
+	new skB: skey;
+	out(c, (B, pk(skB)));
+	in(c, x: bitstring); 
+	let A:host  = bits2Host(adec(dec(x, Kbs), skB)) in
+	in(c, (=A, pkA: pkey));
+	new nB: bitstring;
+	out(c, aenc(nB, pkA)); 
+	in(c, y: bitstring);
+	let m = dec(y, nonce2Key(nB)) in
+	event acceptM(A, B, m);
+	out(c, h(m));
+	event endB(A, B, m).
+
+let pS() = 
+	in(d, Kas: key);
+	in(d, Kbs: key);
+	in(c, x :bitstring); 
+	let (xpkb: bitstring, pkB:pkey) = dec(x, Kas) in
+	out(c, enc(xpkb, Kbs)). 
+
+process
+	(! new X: host; new Kxs: key ; !out(d, (X, Kxs)) |
+	(! in(d, (A: host, Kas: key)) ; in(d, (B:host, Kbs:key)) ; pA(A, B, Kas)) |
+	(! in(d, (B: host, Kbs: key)) ; pB(B, Kbs))) | 
+	(! pS())
+
+	
+
+
+
+
+

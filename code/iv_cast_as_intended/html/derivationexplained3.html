@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+                      <html>
+                    <head>
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+                    <title>ProVerif: derivation for query 3</title>
+                    <link rel="stylesheet" href="cssproverif.css">
+                                                                           </head>
+                                                                         <body>
+                                                                         <H1>Explained derivation</H1>
+Abbreviations:
+<ul>
+
+<li><span class="var">freshRandomNumber_4</span> <span class="conn">=</span> <span class="name">freshRandomNumber_1</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">sessionidv_3</span> <span class="conn">=</span> <span class="name">sessionidv</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">channelvoterandva_1</span> <span class="conn">=</span> <span class="name">channelvoterandva</span>[!1 = <span class="var">@sid_1</span>]
+<li><span class="var">dummyRandomNumber2_1</span> <span class="conn">=</span> <span class="name">dummyRandomNumber2</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">trgsecretkey_1</span> <span class="conn">=</span> <span class="name">trgsecretkey</span>[!1 = <span class="var">@sid_1</span>]
+<li><span class="var">vsecretkey_1</span> <span class="conn">=</span> <span class="name">vsecretkey</span>[!1 = <span class="var">@sid_1</span>]
+<li><span class="var">barCode_1</span> <span class="conn">=</span> <span class="name">barCode</span>[randomWithSignature = <span class="fun">sign</span>(<span class="fun"></span>(<span class="var">freshRandomNumber_4</span>,<span class="var">sessionidv_3</span>),<span class="var">trgsecretkey_1</span>),signedcand = <span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>),!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">vmsecretkey_1</span> <span class="conn">=</span> <span class="name">vmsecretkey</span>[!1 = <span class="var">@sid_1</span>]
+<li><span class="var">channeltrgandmachine_1</span> <span class="conn">=</span> <span class="name">channeltrgandmachine</span>[!1 = <span class="var">@sid_1</span>]
+<li><span class="var">@occ47_2</span> <span class="conn">=</span> <span class="name">@occ47_1</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">channelvoterandtrg_1</span> <span class="conn">=</span> <span class="name">channelvoterandtrg</span>[!1 = <span class="var">@sid_1</span>]
+</ul>
+
+<ol>
+
+<li><a name=step1>The message <span class="var">sessionidv_3</span> may be sent to the attacker at output <a href="process_1.html#occ25" target="process" class="occ">{25}</a>.<br>
+<span class="pred">attacker</span>(<span class="var">sessionidv_3</span>).<br>
+
+<li><a name=step2>The attacker has some term <span class="var">zkp_4</span>.<br>
+<span class="pred">attacker</span>(<span class="var">zkp_4</span>).<br>
+
+<li><a name=step3>The attacker has some term <span class="var">d2_3</span>.<br>
+<span class="pred">attacker</span>(<span class="var">d2_3</span>).<br>
+
+<li><a name=step4>The attacker has some term <span class="var">d1_3</span>.<br>
+<span class="pred">attacker</span>(<span class="var">d1_3</span>).<br>
+
+<li><a name=step5>By <a href="#step4">4</a>, the attacker may know <span class="var">d1_3</span>.<br>
+By <a href="#step3">3</a>, the attacker may know <span class="var">d2_3</span>.<br>
+By <a href="#step2">2</a>, the attacker may know <span class="var">zkp_4</span>.<br>
+By <a href="#step1">1</a>, the attacker may know <span class="var">sessionidv_3</span>.<br>
+Using the function <span class="fun">4-tuple</span> the attacker may obtain <span class="fun"></span>(<span class="var">d1_3</span>,<span class="var">d2_3</span>,<span class="var">zkp_4</span>,<span class="var">sessionidv_3</span>).<br>
+<span class="pred">attacker</span>(<span class="fun"></span>(<span class="var">d1_3</span>,<span class="var">d2_3</span>,<span class="var">zkp_4</span>,<span class="var">sessionidv_3</span>)).<br>
+
+<li><a name=step6>The attacker has some term <span class="var">zkp_3</span>.<br>
+<span class="pred">attacker</span>(<span class="var">zkp_3</span>).<br>
+
+<li><a name=step7>The attacker has some term <span class="var">d2_2</span>.<br>
+<span class="pred">attacker</span>(<span class="var">d2_2</span>).<br>
+
+<li><a name=step8>The attacker has some term <span class="var">d1_2</span>.<br>
+<span class="pred">attacker</span>(<span class="var">d1_2</span>).<br>
+
+<li><a name=step9>By <a href="#step8">8</a>, the attacker may know <span class="var">d1_2</span>.<br>
+By <a href="#step7">7</a>, the attacker may know <span class="var">d2_2</span>.<br>
+By <a href="#step6">6</a>, the attacker may know <span class="var">zkp_3</span>.<br>
+By <a href="#step1">1</a>, the attacker may know <span class="var">sessionidv_3</span>.<br>
+Using the function <span class="fun">4-tuple</span> the attacker may obtain <span class="fun"></span>(<span class="var">d1_2</span>,<span class="var">d2_2</span>,<span class="var">zkp_3</span>,<span class="var">sessionidv_3</span>).<br>
+<span class="pred">attacker</span>(<span class="fun"></span>(<span class="var">d1_2</span>,<span class="var">d2_2</span>,<span class="var">zkp_3</span>,<span class="var">sessionidv_3</span>)).<br>
+
+<li><a name=step10>The message <span class="fun"></span>(<span class="var">d1_2</span>,<span class="var">d2_2</span>,<span class="var">zkp_3</span>,<span class="var">sessionidv_3</span>) that the attacker may have by <a href="#step9">9</a> may be received at input <a href="process_1.html#occ92" target="process" class="occ">{92}</a>.<br>
+So the message <span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>) may be sent on channel <span class="var">channelvoterandva_1</span> at output <a href="process_1.html#occ94" target="process" class="occ">{94}</a>.<br>
+<span class="pred">mess</span>(<span class="var">channelvoterandva_1</span>,<span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>)).<br>
+
+<li><a name=step11>The message <span class="fun">sign</span>(<span class="fun"></span>(<span class="var">freshRandomNumber_4</span>,<span class="var">sessionidv_3</span>),<span class="var">trgsecretkey_1</span>) may be sent on channel <span class="var">channeltrgandmachine_1</span> at output <a href="process_1.html#occ81" target="process" class="occ">{81}</a>.<br>
+<span class="pred">mess</span>(<span class="var">channeltrgandmachine_1</span>,<span class="fun">sign</span>(<span class="fun"></span>(<span class="var">freshRandomNumber_4</span>,<span class="var">sessionidv_3</span>),<span class="var">trgsecretkey_1</span>)).<br>
+
+<li><a name=step12>The event <span class="fun">@p_act</span>(<span class="var">@occ47_2</span>,<span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>)) records how variables are instantiated at <a href="process_1.html#occ47" target="process" class="occ">{47}</a>.<br>
+The message <span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>) that may be sent on channel <span class="var">channelvoterandva_1</span> by <a href="#step10">10</a> may be received at input <a href="process_1.html#occ47" target="process" class="occ">{47}</a>.<br>
+The message <span class="fun">sign</span>(<span class="fun"></span>(<span class="var">freshRandomNumber_4</span>,<span class="var">sessionidv_3</span>),<span class="var">trgsecretkey_1</span>) that may be sent on channel <span class="var">channeltrgandmachine_1</span> by <a href="#step11">11</a> may be received at input <a href="process_1.html#occ50" target="process" class="occ">{50}</a>.<br>
+So the message <span class="var">freshRandomNumber_4</span> may be sent on channel <span class="var">channeltrgandmachine_1</span> at output <a href="process_1.html#occ52" target="process" class="occ">{52}</a>.<br>
+<span class="pred">mess</span>(<span class="var">channeltrgandmachine_1</span>,<span class="var">freshRandomNumber_4</span>).<br>
+
+<li><a name=step13>The message <span class="var">freshRandomNumber_4</span> that may be sent on channel <span class="var">channeltrgandmachine_1</span> by <a href="#step12">12</a> may be received at input <a href="process_1.html#occ82" target="process" class="occ">{82}</a>.<br>
+So the message <span class="fun">sign</span>(<span class="fun"></span>(<span class="var">freshRandomNumber_4</span>,<span class="var">sessionidv_3</span>),<span class="var">trgsecretkey_1</span>) may be sent on channel <span class="var">channelvoterandtrg_1</span> at output <a href="process_1.html#occ83" target="process" class="occ">{83}</a>.<br>
+<span class="pred">mess</span>(<span class="var">channelvoterandtrg_1</span>,<span class="fun">sign</span>(<span class="fun"></span>(<span class="var">freshRandomNumber_4</span>,<span class="var">sessionidv_3</span>),<span class="var">trgsecretkey_1</span>)).<br>
+
+<li><a name=step14>The attacker has some term <span class="var">zkp_2</span>.<br>
+<span class="pred">attacker</span>(<span class="var">zkp_2</span>).<br>
+
+<li><a name=step15>The attacker has some term <span class="var">d2_1</span>.<br>
+<span class="pred">attacker</span>(<span class="var">d2_1</span>).<br>
+
+<li><a name=step16>The attacker has some term <span class="var">d1_1</span>.<br>
+<span class="pred">attacker</span>(<span class="var">d1_1</span>).<br>
+
+<li><a name=step17>By <a href="#step16">16</a>, the attacker may know <span class="var">d1_1</span>.<br>
+By <a href="#step15">15</a>, the attacker may know <span class="var">d2_1</span>.<br>
+By <a href="#step14">14</a>, the attacker may know <span class="var">zkp_2</span>.<br>
+By <a href="#step1">1</a>, the attacker may know <span class="var">sessionidv_3</span>.<br>
+Using the function <span class="fun">4-tuple</span> the attacker may obtain <span class="fun"></span>(<span class="var">d1_1</span>,<span class="var">d2_1</span>,<span class="var">zkp_2</span>,<span class="var">sessionidv_3</span>).<br>
+<span class="pred">attacker</span>(<span class="fun"></span>(<span class="var">d1_1</span>,<span class="var">d2_1</span>,<span class="var">zkp_2</span>,<span class="var">sessionidv_3</span>)).<br>
+
+<li><a name=step18>The message <span class="fun"></span>(<span class="var">d1_1</span>,<span class="var">d2_1</span>,<span class="var">zkp_2</span>,<span class="var">sessionidv_3</span>) that the attacker may have by <a href="#step17">17</a> may be received at input <a href="process_1.html#occ92" target="process" class="occ">{92}</a>.<br>
+So the message <span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>) may be sent on channel <span class="var">channelvoterandva_1</span> at output <a href="process_1.html#occ94" target="process" class="occ">{94}</a>.<br>
+<span class="pred">mess</span>(<span class="var">channelvoterandva_1</span>,<span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>)).<br>
+
+<li><a name=step19>The event <span class="fun">@p_act</span>(<span class="var">@occ47_2</span>,<span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>)) records how variables are instantiated at <a href="process_1.html#occ47" target="process" class="occ">{47}</a>.<br>
+The message <span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>) that may be sent on channel <span class="var">channelvoterandva_1</span> by <a href="#step18">18</a> may be received at input <a href="process_1.html#occ47" target="process" class="occ">{47}</a>.<br>
+The message <span class="fun">sign</span>(<span class="fun"></span>(<span class="var">freshRandomNumber_4</span>,<span class="var">sessionidv_3</span>),<span class="var">trgsecretkey_1</span>) that may be sent on channel <span class="var">channeltrgandmachine_1</span> by <a href="#step11">11</a> may be received at input <a href="process_1.html#occ50" target="process" class="occ">{50}</a>.<br>
+So the message <span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="fun">candidate1</span>,<span class="var">freshRandomNumber_4</span>,<span class="var">dummyRandomNumber2_1</span>,<span class="var">barCode_1</span>,<span class="var">sessionidv_3</span>),<span class="var">vmsecretkey_1</span>) may be sent on channel <span class="var">channelvoterandva_1</span> at output <a href="process_1.html#occ57" target="process" class="occ">{57}</a>.<br>
+<span class="pred">mess</span>(<span class="var">channelvoterandva_1</span>,<span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="fun">candidate1</span>,<span class="var">freshRandomNumber_4</span>,<span class="var">dummyRandomNumber2_1</span>,<span class="var">barCode_1</span>,<span class="var">sessionidv_3</span>),<span class="var">vmsecretkey_1</span>)).<br>
+
+<li><a name=step20>The message <span class="fun"></span>(<span class="var">d1_3</span>,<span class="var">d2_3</span>,<span class="var">zkp_4</span>,<span class="var">sessionidv_3</span>) that the attacker may have by <a href="#step5">5</a> may be received at input <a href="process_1.html#occ92" target="process" class="occ">{92}</a>.<br>
+The message <span class="fun">sign</span>(<span class="fun"></span>(<span class="var">freshRandomNumber_4</span>,<span class="var">sessionidv_3</span>),<span class="var">trgsecretkey_1</span>) that may be sent on channel <span class="var">channelvoterandtrg_1</span> by <a href="#step13">13</a> may be received at input <a href="process_1.html#occ95" target="process" class="occ">{95}</a>.<br>
+The message <span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="fun">candidate1</span>,<span class="var">freshRandomNumber_4</span>,<span class="var">dummyRandomNumber2_1</span>,<span class="var">barCode_1</span>,<span class="var">sessionidv_3</span>),<span class="var">vmsecretkey_1</span>) that may be sent on channel <span class="var">channelvoterandva_1</span> by <a href="#step19">19</a> may be received at input <a href="process_1.html#occ98" target="process" class="occ">{98}</a>.<br>
+So event <span class="fun">OKv</span>(<span class="var">freshRandomNumber_4</span>,<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>) may be executed at <a href="process_1.html#occ101" target="process" class="occ">{101}</a>.<br>
+<span class="pred">end</span>(<span class="fun">OKv</span>(<span class="var">freshRandomNumber_4</span>,<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>)).<br>
+
+<li><a name=step21>By <a href="#step20">20</a>, <span class="pred">end</span>(<span class="fun">OKv</span>(<span class="var">freshRandomNumber_4</span>,<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>)).<br>
+The goal is reached, represented in the following fact:<br>
+<span class="pred">end</span>(<span class="fun">OKv</span>(<span class="var">freshRandomNumber_4</span>,<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>)).<br>
+
+</ol>
+</body>
+</html>

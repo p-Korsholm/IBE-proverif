@@ -1,0 +1,67 @@
+(* Vote privacy - honest VA *) 
+
+process
+
+(
+(* VM key *)
+new VMSecretKey: secretKey; let VMPublicKey = signedPublicKey(VMSecretKey) in out(ch, VMPublicKey);
+
+(* TRG key *)
+new TRGSecretKey: secretKey; let TRGPublicKey = signedPublicKey(TRGSecretKey) in out (ch, TRGPublicKey);
+
+(* BB key *)
+new BBSecretKey: secretKey; let BBPublicKey = signedPublicKey(BBSecretKey) in out (ch, BBPublicKey);
+
+(* voter key for signature of the paper ballot *)
+new vsecretkey1: secretKey; let vpublickey1 = signedPublicKey(vsecretkey1) in out(ch, vpublickey1);
+
+(* voter key for signature of the paper ballot *)
+new vsecretkey2: secretKey; let vpublickey2 = signedPublicKey(vsecretkey2) in out(ch, vpublickey2);
+
+(* private channels for communication *)
+new channelVoterAndVA1: channel;
+new channelVoterAndVA2: channel;
+new channelVoterAndTRG: channel;
+new channelTRGAndMachine1: channel;
+new channelTRGAndMachine2: channel;
+new channelVAPrep1: channel;
+new channelVAPrep2: channel;
+new channelVAReceipts1: channel;
+new channelVAReceipts2: channel;
+new channelVAandTest: channel;
+new channelDummy: channel;
+
+(* session Ids for the two voters - making sure,
+  that the voter and the TRG are in the same session *)
+new sessionIdA: bitstring;
+new sessionIdB: bitstring;
+out(ch, sessionIdA);
+out(ch, sessionIdB);
+
+(VotingAuthority(sessionIdA, channelVAandTest, channelVAPrep1,channelVAReceipts1, channelVoterAndVA1, channelTRGAndMachine1, VMSecretKey, TRGPublicKey, vpublickey1)) |
+(VotingAuthority(sessionIdB, channelVAandTest, channelVAPrep2, channelVAReceipts2, channelVoterAndVA2, channelTRGAndMachine2, VMSecretKey, TRGPublicKey, vpublickey2)) |
+
+(TRG(sessionIdA, TRGSecretKey, channelVoterAndTRG, channelTRGAndMachine1, channelDummy)) |
+(TRG(sessionIdB, TRGSecretKey, channelVoterAndTRG, channelTRGAndMachine2, channelDummy)) |
+
+(* choice on the candidate chosen to
+  test observational equivalence between the two voters. *)
+
+(VoterTallying(sessionIdA, vsecretkey1, choice[candidate0, candidate1], TRGPublicKey, VMPublicKey, channelVoterAndTRG, channelVoterAndVA1, channelDummy, channelDummy, channelDummy, BBPublicKey)) |
+(VoterTallying(sessionIdB, vsecretkey2, choice[candidate1, candidate0], TRGPublicKey, VMPublicKey, channelVoterAndTRG, channelVoterAndVA2, channelDummy, channelDummy, channelDummy, BBPublicKey)) |
+
+(Bulletin2(sessionIdA, sessionIdB, channelVAPrep1, channelVAPrep2, channelVAReceipts1, channelVAReceipts2, ch, BBSecretKey,true)) |
+
+(!in(ch, sessionIdAtt: bitstring);
+  new channelVAReceiptsAtt: channel;
+  new channelVAPrepAtt: channel;
+  new channelTRGAndMachineAtt: channel;
+  new channelVAandTestAtt: channel;
+  in(ch, vpublickeyAtt: publicKey);
+  (VotingAuthority(sessionIdAtt, channelVAandTestAtt, channelVAPrepAtt, channelVAReceiptsAtt, ch, channelTRGAndMachineAtt, VMSecretKey, TRGPublicKey, vpublickeyAtt) |
+   TRG(sessionIdAtt, TRGSecretKey, ch, channelTRGAndMachineAtt, channelDummy) |
+   Bulletin(sessionIdAtt, channelVAPrepAtt, channelVAReceiptsAtt, channelDummy, BBSecretKey)
+  )
+)
+| !in(channelDummy, x: bitstring)
+)

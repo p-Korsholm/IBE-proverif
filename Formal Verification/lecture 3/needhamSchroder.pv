@@ -1,0 +1,49 @@
+channel c.
+
+type pkey.
+type skey. 
+
+fun pk(skey):pkey.
+fun aenc(bitstring, pkey) : bitstring.
+reduc forall x: bitstring, y:skey; adec(aenc(x, pk(y)), y) = x.
+
+(* 
+
+A -> B: {A, Na}pkB
+B -> A: {Na, Nb}pkA
+A -> B: {Nb}pkB
+
+*)
+event start(pkey, pkey, bitstring). 
+event end(pkey, pkey, bitstring).
+(*query attacker(new Na, new Nb).*)
+
+query pkA: pkey, pkB:pkey, Na:bitstring, Nb: bitstring;
+	event(end(pkA, pkB, (Na, Nb))) ==> event(start(pkA, pkB, (Na, Nb))).
+
+let pA(skA: skey, pkB: pkey) =
+	new Na: bitstring;
+	out(c, aenc((pk(skA), Na), pkB));
+	in(c, x:bitstring);
+	let (=pkB, =Na, Nb: bitstring) = adec(x, skA) in
+	out(c, aenc(Nb, pkB));
+	event end(pk(skA), pkB, (Na, Nb)).
+
+let pB(skB: skey) = 
+	in(c, y: bitstring);
+	let (pkA:pkey, Na:bitstring) = adec(y, skB) in
+	new Nb : bitstring; 
+	event start(pk(skB),pkA,(Na, Nb));
+	out(c, aenc((pk(skB), Na, Nb), pkA));
+	in(c, z:bitstring);
+	let (=Nb) = adec(z, skB) in 0.
+
+
+process 
+	! new sk:skey ;(
+	! in(c, pk_r: pkey); pA(sk, pk_r) | 
+	! pB(sk) |
+	out(c, pk(sk))
+	)
+
+

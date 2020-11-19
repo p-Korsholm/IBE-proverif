@@ -1,0 +1,96 @@
+(* Global Verification - Completeness & Sufficiency - VA dishonest*)
+(* ATTACK IF VA CAN VOTE. WE NEED TO REASON UP TO DISHONEST VOTERS *)  
+
+(* Sanity checks *)
+query b:bitstring, v: bitstring, i: bitstring, s: bitstring, b':bitstring;
+    event (BB(b,i,s));
+    event (NoBlame(b,v,s));
+    event (VoterChoice(v,s));
+    event (OKvv(b,s));
+    event (KOvv(b,s));
+    (* Sufficiency *)
+    event  (Blame(b,v,s));
+    (* Completeness *)
+    inj-event (NoBlame(b,v,s)) ==> ((inj-event (OKvv(b,s)) && inj-event (VoterChoice(v,s))) || (inj-event(KOvv(b',s)) && b'<>b)).
+
+
+(*-----Test-------*)
+let test(sessionIdv: bitstring, vapk:publicKey, channelVoterandTest: channel, channelBBandTest: channel, bbpkey: publicKey)=
+    in(channelVoterandTest, (receiptVoter:bitstring, VoterBBreceipt: bitstring, d1: dvote, d2:dvote, zkp: bitstring, =sessionIdv)); 
+    (* takes in VA's published commitments, receipt, new dummy commitment, and opened unused dummy votes *)
+    in(channelBBandTest, (=d1, =d2, =zkp,receiptVA: bitstring, newdummy: dvote, zkp2: bitstring, (val0: bitstring, rand0: bitstring), (val1: bitstring, rand1: bitstring), =sessionIdv, BBinstance: bitstring));
+
+    let messageReceiptVA=checksign(receiptVA, vapk) in
+    let (ca: bitstring, cb: bitstring, ra: bitstring, rb:bitstring, barcodeR: bitstring, sessionIdv':bitstring)=messageReceiptVA in
+
+(* receipt contains the two candidates *)
+if (ca=candidate0 && cb=candidate1)  then
+    (* each candidate had the same number of dummy votes  *)
+    if (checkzkp(candidate0, candidate1, d1, d2, zkp) = OK) then
+        (* each receipt is well formed and contains no more then one dummy vote of each candidate *)
+        if (checkzkp2(candidate0, candidate1, ra, rb, newdummy, d1, d2, zkp2) = OK  && 
+            ra<>rb && ra<>candidate0 && ra<>candidate1 && rb<>candidate0 && rb<>candidate1 ) then 
+            (* check unused dummy vote *)
+            if (dummyVotePair(commitValue(val0,rand0),commitValue(val1,rand1))=d1 ||  dummyVotePair(commitValue(val0,rand0),commitValue(val1,rand1))=d2) && val0<>ra && val0<>rb then event NoBlame(receiptVA,val1,sessionIdv)  
+            else event Blame(receiptVA,val1,sessionIdv)
+        else event Blame(receiptVA,val1,sessionIdv)
+   else event Blame(receiptVA,val1,sessionIdv)
+else event Blame(receiptVA,val1,sessionIdv). 
+
+(*///////////////////   Main //////////*)
+process
+
+!(
+(* vm key *)
+new vmsecretkey: secretKey; let vmpublickey = signedPublicKey(vmsecretkey) in out(ch, vmpublickey);
+
+(* trg key *)
+new trgsecretkey: secretKey; let trgpublickey = signedPublicKey(trgsecretkey) in out (ch, trgpublickey);
+
+(* BB key *)
+new bbsecretkey: secretKey; let bbpublickey = signedPublicKey(bbsecretkey) in out (ch, bbpublickey);
+
+(* voter key for signature of the paper ballot *)
+new vsecretkey: secretKey; let vpublickey = signedPublicKey(vsecretkey) in out(ch, vpublickey);
+
+(* private channels for communication *)
+new channelvoterandva: channel;
+new channelvoterandtrg: channel;
+new channelvaprep: channel;
+new channelvareceipts: channel;
+new channeltrgandtest: channel;
+new channelvoterandtest: channel;
+new channelBBandTest: channel;
+new channelVAandTest: channel;
+
+
+new channeltrgandmachine: channel;
+(* Dishonest VA *)
+
+out(ch, channelvoterandva);
+out(ch, channeltrgandmachine);
+out(ch, channelvaprep);
+out(ch, channelvareceipts);
+out(ch, channelVAandTest);
+out(ch, vmsecretkey);
+!(
+new sessionidv: bitstring;
+out(ch, sessionidv);
+
+
+(* Voting Authority dishonest *)
+(*(VotingAuthority(sessionidv, channelvaprep,channelvareceipts, channelvoterandva, channeltrgandmachine, vmsecretkey, trgpublickey )) |*)
+
+(TRG(sessionidv,trgsecretkey,channelvoterandtrg,channeltrgandmachine, channeltrgandtest)) | 
+
+(VoterTallying(sessionidv,vsecretkey,candidate0, trgpublickey, vmpublickey, channelvoterandtrg, channelvoterandva, channelvoterandtest, bbpublickey)) |
+
+(Bulletin(sessionidv,channelvaprep,channelvareceipts, channelBBandTest, bbsecretkey)) |
+
+(test(sessionidv, vmpublickey,channelvoterandtest,channelBBandTest, bbpublickey ))
+
+)
+)
+
+
+

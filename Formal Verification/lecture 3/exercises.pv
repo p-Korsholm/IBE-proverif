@@ -1,0 +1,8 @@
+channel c. 
+
+free n: bitstring.
+fun h(bitstring): bitstring.
+
+process
+	in(c, x:bitstring);
+	out(c, diff[h(n), h((x,n))])

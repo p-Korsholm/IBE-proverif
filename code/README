@@ -1,0 +1,12 @@
+The library 'reach_lib' should be used with all the files in folders 'iv_cast_as_intended', 'dr_cast_as_intended', 'dr_tally', and 'gv'.
+For example: 
+$ proverif -lib reach_lib gv/gv_soundness.pv
+
+The library 'privacy_lib' should be used with the files 'vote_privacy', 'receipt_freeness', and 'coercion_resistance', which are contained in the folder 'privacy'.
+For example:
+$ proverif -lib privacy_lib privacy/vote_privacy.pv
+
+The library 'dis_va_privacy_lib' should be used with the files 'dis_va_vote_privacy', and 'dispute_resolution', which are contained in the folder 'privacy'.
+For example:
+$ proverif -lib dis_va_privacy_lib privacy/dispute_resolution.pv
+

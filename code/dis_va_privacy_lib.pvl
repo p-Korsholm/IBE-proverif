@@ -1,0 +1,303 @@
+(* ProVerif library for dispute resolution and vote privacy with a dishonest VA *)
+free ch: channel.
+
+type publicKey.
+type secretKey.
+type commit.
+type dvote.
+type key.
+
+fun dummyVotePair(commit, commit): dvote.
+fun commitValue(bitstring, bitstring): commit.
+reduc forall c1: commit, c2: commit; openDummyVote(dummyVotePair(c1, c2)) = (c1,c2).
+reduc forall val: bitstring, rand: bitstring; openCommit(commitValue(val, rand)) = (val, rand) [private].
+
+(* Signatures *)
+fun signedPublicKey(secretKey): publicKey.
+fun sign(bitstring, secretKey): bitstring.
+
+(*used for TrustedRandomGenerator to be sure that
+the random number comes from the TrustedRandomGenerator*)
+reduc forall m: bitstring, k: secretKey; checksign(sign(m,k), signedPublicKey(k)) = m.
+
+const candidate0: bitstring.
+const candidate1: bitstring.
+
+const OK: bitstring.
+
+fun pzk1(bitstring, bitstring, bitstring, bitstring, commit, commit) : bitstring [private].
+
+fun checkzkp(bitstring, bitstring, dvote, dvote, bitstring) : bitstring
+  reduc forall candx: bitstring, candy: bitstring, rand1: bitstring, rand2: bitstring, randCommit1: bitstring, randCommit2: bitstring, cr1: bitstring, cr2: bitstring;
+    checkzkp(candx, candy, dummyVotePair(commitValue(randCommit1,cr1), commitValue(candx, rand1)), dummyVotePair(commitValue(randCommit2,cr2), commitValue(candy, rand2)), pzk1(candx, candy, rand1, rand2, commitValue(candx, rand1), commitValue(candy, rand2))) = OK.
+
+fun pzk2(bitstring, bitstring, bitstring, dvote, dvote, bitstring, bitstring, bitstring, bitstring) : bitstring [private].
+
+(* checkzkp2(C0,C1,Rtrg,  Rb,dummy(Rtrg,  C0),dummy(Ra,C0), dummy(Rb,C1),pzk2) *)
+(* checkzkp2(C0,C1,Ra,  Rtrg,dummy(Rtrg,  C1),dummy(Ra,C0), dummy(Rb,C1),pzk2) *)
+fun checkzkp2(bitstring, bitstring, bitstring, bitstring, dvote, dvote, dvote, bitstring): bitstring
+    reduc forall c0: bitstring, c1: bitstring, Rtrg: bitstring, cr0: bitstring, cr1: bitstring, rr0:bitstring, rr1: bitstring, R0: bitstring, R1: bitstring, zkp: bitstring, rr3: bitstring, cr3: bitstring;
+    checkzkp2(c0, c1, Rtrg, R1, dummyVotePair(commitValue(Rtrg,rr3),commitValue(candidate0,cr3)), dummyVotePair(commitValue(R0, rr0), commitValue(c0, cr0)), dummyVotePair(commitValue(R1, rr1), commitValue(c1, cr1)),
+              pzk2(c0, c1, R1, dummyVotePair(commitValue(Rtrg, rr3), commitValue(candidate0, cr3)), dummyVotePair(commitValue(R1, rr1), commitValue(candidate1, cr1)), cr1, cr3, rr1, rr3)) = OK
+    otherwise forall c0: bitstring, c1: bitstring, Rtrg: bitstring, cr0: bitstring, cr1: bitstring, rr0:bitstring, rr1: bitstring, R0: bitstring, R1: bitstring, zkp: bitstring, rr3: bitstring, cr3: bitstring;
+    checkzkp2(c0, c1,R0, Rtrg, dummyVotePair(commitValue(Rtrg,rr3),commitValue(candidate1,cr3)), dummyVotePair(commitValue(R0, rr0), commitValue(c0, cr0)), dummyVotePair(commitValue(R1, rr1), commitValue(c1, cr1)),
+              pzk2(c0, c1, R0, dummyVotePair(commitValue(Rtrg, rr3), commitValue(candidate1, cr3)),dummyVotePair(commitValue(R0, rr0), commitValue(candidate0, cr0)), cr0, cr3, rr0, rr3)) = OK.
+
+
+(*Queries*)
+
+event NoBlameAlign(bitstring,bitstring, bitstring).
+event NoBlameEnc(bitstring,bitstring, bitstring).
+event BlameAlign(bitstring,bitstring, bitstring).
+event BlameEnc(bitstring,bitstring, bitstring).
+event BB(bitstring,bitstring, bitstring).
+event VoterChoice(bitstring, bitstring).
+event OKv(bitstring,bitstring,bitstring).
+event KOv(bitstring,bitstring,bitstring).
+event OKt(bitstring,bitstring,bitstring).
+event KOt(bitstring,bitstring,bitstring).
+event OKvv(bitstring,bitstring).
+event KOvv(bitstring,bitstring).
+event NoBlame(bitstring,bitstring, bitstring).
+event Blame(bitstring,bitstring, bitstring).
+
+
+(*---------------Protocol-----------------*)
+(* /////////// VotingAuthority/Machine ///////////////////////////////////// *)
+let VotingAuthority(sessionidv: bitstring, channelVAandTest:channel, channelVAPrep:channel, channelVAReceipts: channel, channelVoterAndVA:channel, channelTRGAndMachine:channel, VMSecretKey:secretKey, TRGPublicKey:publicKey, vpkey: publicKey) =
+  (*new rand1rand1: bitstring;
+  new rand1Candidate1: bitstring;
+  new rand2rand2: bitstring;
+  new rand2Candidate2: bitstring;
+
+  new dummyRandomNumber1: bitstring;
+  new dummyRandomNumber2: bitstring;
+
+  let randomNumberCommit1 = commitValue(dummyRandomNumber1, rand1rand1) in
+  let randomNumberCommit2 = commitValue(dummyRandomNumber2, rand2rand2) in
+  let candidateCommit1 = commitValue(candidate0, rand1Candidate1) in
+  let candidateCommit2 = commitValue(candidate1, rand2Candidate2) in
+
+  let dVotePair1 = dummyVotePair(randomNumberCommit1, candidateCommit1) in
+  let dVotePair2 = dummyVotePair(randomNumberCommit2, candidateCommit2) in
+
+  let pz1 = pzk1(candidate0, candidate1, rand1Candidate1, rand2Candidate2, candidateCommit1, candidateCommit2) in
+
+  out(channelVAPrep, (dVotePair1,dVotePair2,pz1,sessionidv));*)
+
+(*** VOTING PHASE STARTS HERE ***)
+   (* get choice from voter *)
+    in(channelVoterAndVA, signedcand:bitstring) [precise];
+    let (candidateX:bitstring, =sessionidv)=checksign(signedcand, vpkey) in
+    (* If the choice is valid - generate a receipt
+      with the fresh random value received from
+      the TRG and the dummy random values generated by the voting auhthority *)
+    if (candidateX = candidate0 || candidateX = candidate1)   then
+    in(channelTRGAndMachine, randomWithSignature: bitstring);
+    let (freshRandomNumber: bitstring, =sessionidv) = checksign(randomWithSignature, TRGPublicKey) in
+    (* Sync TRG *)
+    out(channelTRGAndMachine, freshRandomNumber);
+
+    (* the attacker provides barcode and dummy vote *)
+    in(ch, (barCode:bitstring, dummyRandomNumber: bitstring));
+    let paper_ballot=sign((signedcand, barCode), VMSecretKey) in
+    if (candidateX = candidate0) then
+    (
+      (* create receipt with freshRandomNumber
+      for cand0 and dummy for cand1 *)
+      let receipt = sign((candidate0,candidate1,freshRandomNumber, dummyRandomNumber, barCode, sessionidv), VMSecretKey) in
+      out(channelVoterAndVA, receipt);
+      (* TALLY STARTS HERE*)
+      out(channelVAReceipts, receipt)
+    )
+
+    else if (candidateX = candidate1) then
+    (
+      (* create receipt with freshRandomNumber
+      for cand1 and dummy for cand0 *)
+      let receipt = sign((candidate0,candidate1, dummyRandomNumber, freshRandomNumber,barCode, sessionidv), VMSecretKey) in
+      out(channelVoterAndVA, receipt);
+      (* TALLY STARTS HERE*)
+      out(channelVAReceipts, receipt)
+    )
+.
+
+(* /////////// VotingMachine ///////////////////////////////////// *)
+let VotingMachine(sessionidv: bitstring, channelVAandTest:channel, channelVAPrep:channel, channelVAReceipts: channel, channelVoterAndVA:channel, channelTRGAndMachine:channel, VMSecretKey:secretKey, TRGPublicKey:publicKey, vpkey: publicKey, dummyRandomNumber: bitstring) =
+  (*new rand1rand1: bitstring;
+  new rand1Candidate1: bitstring;
+  new rand2rand2: bitstring;
+  new rand2Candidate2: bitstring;
+
+  new dummyRandomNumber1: bitstring;
+  new dummyRandomNumber2: bitstring;
+
+  let randomNumberCommit1 = commitValue(dummyRandomNumber1, rand1rand1) in
+  let randomNumberCommit2 = commitValue(dummyRandomNumber2, rand2rand2) in
+  let candidateCommit1 = commitValue(candidate0, rand1Candidate1) in
+  let candidateCommit2 = commitValue(candidate1, rand2Candidate2) in
+
+  let dVotePair1 = dummyVotePair(randomNumberCommit1, candidateCommit1) in
+  let dVotePair2 = dummyVotePair(randomNumberCommit2, candidateCommit2) in
+
+  let pz1 = pzk1(candidate0, candidate1, rand1Candidate1, rand2Candidate2, candidateCommit1, candidateCommit2) in
+
+  out(channelVAPrep, (dVotePair1,dVotePair2,pz1,sessionidv));*)
+
+(*** VOTING PHASE STARTS HERE ***)
+   (* get choice from voter *)
+    in(channelVoterAndVA, signedcand:bitstring) [precise];
+    let (candidateX:bitstring, =sessionidv)=checksign(signedcand, vpkey) in
+    (* If the choice is valid - generate a receipt
+      with the fresh random value received from
+      the TRG and the dummy random values generated by the voting auhthority *)
+    if (candidateX = candidate0 || candidateX = candidate1)   then
+    in(channelTRGAndMachine, randomWithSignature: bitstring);
+    let (freshRandomNumber: bitstring, =sessionidv) = checksign(randomWithSignature, TRGPublicKey) in
+    (* Sync TRG *)
+    out(channelTRGAndMachine, freshRandomNumber);
+
+    new barCode: bitstring;
+    let paper_ballot=sign((signedcand, barCode), VMSecretKey) in
+    if (candidateX = candidate0) then
+    (
+      (* create receipt with freshRandomNumber
+      for cand0 and dummy for cand1 *)
+      let receipt = sign((candidate0,candidate1,freshRandomNumber, dummyRandomNumber, barCode), VMSecretKey) in
+      out(channelVoterAndVA, receipt);
+      (* TALLY STARTS HERE*)
+      out(channelVAReceipts, receipt)
+    )
+
+    else if (candidateX = candidate1) then
+    (
+      (* create receipt with freshRandomNumber
+      for cand1 and dummy for cand0 *)
+      let receipt = sign((candidate0,candidate1, dummyRandomNumber, freshRandomNumber,barCode), VMSecretKey) in
+      out(channelVoterAndVA, receipt);
+      (* TALLY STARTS HERE*)
+      out(channelVAReceipts, receipt)
+    )
+.
+
+(* Process that publishes unused dummy votes,
+  proofs and receipts in the tally phase *)
+let Bulletin(sessionidv: bitstring, chVAPrep: channel,chVARec: channel, channelBBAndTest: channel,  bbskey: secretKey) =
+  in(chVAPrep, (dummyVote1: dvote, dummyVote2: dvote, zkp: bitstring, =sessionidv));
+  out(ch, (dummyVote1, dummyVote2,zkp, sessionidv));
+  in(chVARec, (receipt:bitstring, newDummyVote3: dvote, zkp2:bitstring, unusedDvote:dvote, =sessionidv)) [precise];
+  let (c1: commit, c2: commit) = openDummyVote(unusedDvote) in
+  new BBinstance: bitstring;
+  event BB(receipt, BBinstance, sessionidv);
+  let BBreceipt=sign((receipt,BBinstance,sessionidv), bbskey) in
+  out(ch, BBreceipt);
+  out(channelBBAndTest, (dummyVote1,dummyVote2,zkp,receipt, newDummyVote3, zkp2, openCommit(c1), openCommit(c2),sessionidv, BBinstance));
+  out(ch,(dummyVote1,dummyVote2,zkp,receipt, newDummyVote3, zkp2, openCommit(c1), openCommit(c2),sessionidv, BBinstance)).
+
+
+let Bulletin3(sessionIdA: bitstring, sessionIdB: bitstring, chVAPrep1: channel, chVAPrep2: channel, chVAr1: channel, chVAr2: channel, chR: channel, bbskey: secretKey) =
+
+  (* get receipts from voting machine *)
+  in(chVAr1, receipt:bitstring);
+  in(chVAr2, receipt2:bitstring);
+  (* get other stuff from the attacker *)
+
+  new BBinstance: bitstring;
+  let BBreceipt=sign((receipt,BBinstance), bbskey) in
+  let BBreceipt2=sign((receipt2,BBinstance), bbskey) in
+  (* receipts must be shuffled, otherwise attack *)
+  out(chR, choice[BBreceipt, BBreceipt2]);
+  out(chR, choice[BBreceipt2, BBreceipt]).
+
+(*////////// Voter process including tallying ////////////////*)
+let VoterTallying(sessionIDv: bitstring, vkey: secretKey, candidateX: bitstring, TRGPublicKey: publicKey, VMPublicKey: publicKey, channelVoterAndTRG:channel, channelVoterAndVA: channel, channelVoterAndTest: channel, channelReceipt: channel, channelRandomNumber: channel, bbpkey: publicKey) =
+(* NOTE: channelReceipt and channelRandomNumber are used to setup vote secrecy, receipt freenes and privacy in dispute resolution.
+   - vote secrecy does not reveal receipts nor random numbers, so both channels are set to a dummy private channel
+   - receipt freeness uses channelReceipt to communicate the voter's receipts to the attacker
+   - dispute resolution provides the fresh random numbers (note that the bulletin board must not publish the receipts to preserve privacy in this case)
+*)
+    event VoterChoice(candidateX, sessionIDv);
+    in(ch, (d1: dvote, d2: dvote, zkp: bitstring));
+    (* the candidate chosen is valid *)
+    if (candidateX=candidate0 || candidateX=candidate1) then
+      (* send vote to VM on ch*)
+      out(channelVoterAndVA, sign((candidateX, sessionIDv),vkey));
+      (* get the random from TRG *)
+      in(channelVoterAndTRG, randomWithSignature: bitstring);
+      let (freshRandomNumber: bitstring, =sessionIDv) = checksign(randomWithSignature, TRGPublicKey) in
+      (*Sync Voter and VA trg number *)
+      (* get the receipt from VA *)
+      in(channelVoterAndVA,  receipt: bitstring);
+      (* NOTE: publishing the paper ballot leads to an attack. It is necessary to be able to forge paper ballots to be coercion resistance
+      if you forge the paper ballot you don't get dispute resolution, so it's either dispute resolution or coercion resistance *)
+      (* out(ch, paper_ballot);*)
+      let (ca: bitstring, cb: bitstring, ra: bitstring, rb: bitstring, barcodeR': bitstring)=checksign(receipt, VMPublicKey) in
+      out(channelRandomNumber, freshRandomNumber);
+      out(channelReceipt, receipt);
+      if (ra=freshRandomNumber && ca=candidate0 && cb=candidate1 && candidateX=candidate0 ) ||
+         (rb=freshRandomNumber && ca=candidate0 && cb=candidate1 && candidateX=candidate1 ) then
+        (* Tally starts here *)
+        in(ch, myBBreceipt: bitstring);
+        let (receiptBB: bitstring, BBinstance: bitstring, =sessionIDv)=checksign(myBBreceipt, bbpkey) in
+                 if receiptBB=receipt then
+                    event OKvv(receipt,sessionIDv);
+                    out(channelVoterAndTest, (receipt, myBBreceipt, d1,d2,zkp, sessionIDv))
+                 else
+                    event KOvv(receipt,sessionIDv);
+                    out(channelVoterAndTest, (receipt, myBBreceipt, d1,d2,zkp, sessionIDv))
+        else 0
+      else 0.
+
+(* ///////////// Voter process ////////////////*)
+let Voter(sessionIDv: bitstring, vkey: secretKey,candidateX: bitstring, TRGPublicKey: publicKey, VMPublicKey: publicKey, channelVoterAndTRG:channel, channelVoterAndVA: channel, channelVoterAndTest: channel, channelReceipt: channel, channelRandomNumber: channel, bbpkey: publicKey) =
+  event VoterChoice(candidateX, sessionIDv);
+    in(ch, (d1: dvote, d2: dvote, zkp: bitstring, =sessionIDv));
+    (* the candidate chosen is valid *)
+    if (candidateX=candidate0 || candidateX=candidate1) then
+      (* send vote to VM on ch*)
+      out(channelVoterAndVA, sign((candidateX, sessionIDv),vkey));
+      (* get the random from TRG *)
+      in(channelVoterAndTRG, randomWithSignature: bitstring);
+      let (freshRandomNumber: bitstring, =sessionIDv) = checksign(randomWithSignature, TRGPublicKey) in
+      (*Sync Voter and VA trg number *)
+      (* get the receipt from VA *)
+      in(channelVoterAndVA, receipt: bitstring);
+      let (ca: bitstring, cb: bitstring, ra: bitstring, rb: bitstring, barcodeR': bitstring, sessionIDv':bitstring)=checksign(receipt, VMPublicKey) in
+      out(channelRandomNumber, freshRandomNumber);
+      out(channelReceipt, receipt);
+      out(ch, barcodeR');
+      (* the attacker does not know which entry the privacy sleeve is hiding *)
+      out(ch, choice[ra,rb]);
+      out(ch, choice[rb,ra]).
+      (*if (ra=freshRandomNumber && ca=candidate0 && cb=candidate1 && candidateX=candidate0 ) ||
+         (rb=freshRandomNumber && ca=candidate0 && cb=candidate1 && candidateX=candidate1 ) then
+            event OKv(freshRandomNumber,candidateX,sessionIDv);
+            out(channelVoterAndTest, (candidateX,receipt, sessionIDv));
+            in(ch, myBBreceipt: bitstring);
+            let (receiptBB: bitstring, BBinstance: bitstring, =sessionIDv)=checksign(myBBreceipt, bbpkey) in
+             0
+            else 0
+      else
+            event KOv(freshRandomNumber,candidateX,sessionIDv);
+            out(channelVoterAndTest, (candidateX,receipt, sessionIDv));
+            in(ch, myBBreceipt: bitstring);
+            let (receiptBB: bitstring, BBinstance: bitstring, =sessionIDv)=checksign(myBBreceipt, bbpkey) in
+             0
+            else 0.*)
+
+(*/////////////// TRG ///////////////*)
+let TRG(sessionIdTRG: bitstring,TRGSecretKey: secretKey, ch0: channel, ch1: channel, channelTRGAndTest: channel) =
+  (* Generating a new freshRandomNumber to be
+    printed on the receipt next to the voter's *)
+  new freshRandomNumber: bitstring;
+
+  (* Sending the freshRandomNumber to the VotingMachine/Authority *)
+  out(ch1, (sign((freshRandomNumber, sessionIdTRG), TRGSecretKey)));
+  (* Sync with VA *)
+  in(ch1, =freshRandomNumber);
+
+  (* Sending the freshRandomNumber to the Voter through a private ch *)
+  out(ch0, (sign((freshRandomNumber, sessionIdTRG), TRGSecretKey)));
+
+  out(channelTRGAndTest, (sign((freshRandomNumber, sessionIdTRG), TRGSecretKey), sessionIdTRG))
+.

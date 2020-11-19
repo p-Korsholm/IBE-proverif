@@ -1,0 +1,53 @@
+channel c.
+free d: channel[private].
+
+type skey. 
+type host. 
+
+fun enc(bitstring, skey) : bitstring. 
+reduc forall x: bitstring, y: skey; dec(enc(x, y), y) = x. 
+
+query attacker(new Kab).
+
+event startA(host, host, bitstring). 
+event endA(host, host, bitstring, bitstring, skey). 
+event startB(host, host, bitstring, bitstring, skey).
+event endB(host, host, bitstring, bitstring, skey). 
+
+query A: host, B:host, nA:bitstring, nB:bitstring, Kab:skey; 
+	event (endA(A, B, nA, nB, Kab)) ==> event (startB(A, B, nA, nB, Kab)).
+
+let pA(A: host, B:host, Kas: skey) =
+	new nA: bitstring;
+	event startA(A, B, nA);
+	out(c, (A, B, nA));
+	in(c, x: bitstring);
+	let (msgA: bitstring, nAenc:bitstring, nB:bitstring) = x in
+	let (=A, =B, =nA, Kab: skey) = dec(msgA, Kas) in
+	let (=nA) = dec(nAenc, Kab) in
+	out(c, enc(nB, Kab));
+	event endA(A, B, nA, nB, Kab).
+
+let pB(B:host, Kbs: skey) = 
+	in(c, x: bitstring); 
+	let (msgA: bitstring, msgB: bitstring) = x in
+	let (A:host, =B, nA:bitstring, Kab:skey) = dec(msgB, Kbs) in
+	new nB: bitstring;
+	event startB(A, B, nA, nB, Kab);
+	out(c, (msgA, enc(nA, Kab), nB));
+	in(c, y: bitstring);
+	let (=nB) = dec(y, Kab) in
+	event endB(A, B, nA, nB, Kab).
+
+let pS() = 
+	in(c, (A: host, B:host, nA: bitstring)); 
+	in(d, (=A, Kas: skey));
+	in(d, (=B, Kbs: skey));	
+	new Kab: skey;
+	out(c, (enc((A, B, nA, Kab), Kas), enc((A, B, nA, Kab), Kbs))).
+
+process 
+	(! new X: host; new Kxs: skey;  !out(d, (X,Kxs))) | 
+	(! in(d, (A: host, Kas: skey)); in(d, (B: host, x: bitstring)); pA(A, B, Kas)) | 
+	(! in(d, (B: host, Kbs: skey)); pB(B, Kbs)) | 
+	(! pS())

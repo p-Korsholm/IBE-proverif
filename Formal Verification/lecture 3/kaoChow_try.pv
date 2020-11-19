@@ -1,0 +1,45 @@
+channel c.
+
+type key. 
+type pkey.
+type ident. 
+
+fun enc(bitstring, key) : bitstring. 
+reduc forall x: bitstring, y: key; dec(enc(x, y), y) = x. 
+
+query attacker(new Kab).
+
+let pA(Kas: key) =
+	new pkA : bitstring; 
+	new pkB : bitstring;
+	new nA: bitstring;
+	out(c, (pkA, pkB, nA));
+	in(c, x: bitstring);
+	let (msgA: bitstring, nAenc:bitstring, nB:bitstring) = x in
+	let (A: pkey, B:pkey, nAdec:bitstring, Kab:key) = dec(msgA, Kas) in
+	if nA = nAdec then
+	let (=nA) = dec(nAenc, Kab) in
+	out(c, enc(nB, Kab)).
+
+let pB(Kbs: key) = 
+	in(c, x: bitstring); 
+	let (msgA: bitstring, msgB: bitstring) = x in
+	let (A:pkey, B:pkey, nA:bitstring, Kab:key) = dec(msgB, Kbs) in
+	new nB: bitstring;
+	out(c, (msgA, enc(nA, Kab), nB));
+	in(c, y: bitstring);
+	let (=nB) = dec(y, Kab).
+
+let pS(Kas: key, Kbs: key) = 
+	in(c, x: bitstring); 
+	let (A:bitstring, B:bitstring, nA:bitstring) = dec(x,Kas) in
+	new Kab: key;
+	out(c, (enc((A, B, nA, Kab), Kas), enc((A, B, nA, Kab), Kbs))).
+
+process
+	 ! new kas: key;
+	 ! new kbs: key;
+	(pA(kas) | 
+	 pB(kbs) | 
+	 pS(kas, kbs))
+	

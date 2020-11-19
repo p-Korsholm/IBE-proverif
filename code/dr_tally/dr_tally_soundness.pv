@@ -1,0 +1,80 @@
+(* Dispute Resolution Tally- Soundness - Voter dishonest*)
+
+
+(* Sanity checks *)
+query b:bitstring, v: bitstring, i: bitstring, s: bitstring;
+    event (BB(b,i,s));
+    event (NoBlame(b,i,s));
+    (* Soundness *)
+    event  (Blame(b,i,s)).
+
+
+(*-----Test-------*)
+let test(sessionIdv: bitstring, vapk:publicKey, channelVoterandTest: channel, channelBBandTest: channel, bbpkey: publicKey)=
+    (*takes in candidate receipt  from the voter *)
+    in(channelVoterandTest, (receiptVoter:bitstring,VoterBBreceipt: bitstring,d1: dvote, d2:dvote, zkp: bitstring, =sessionIdv)); 
+    (* takes in VA's published commitments, receipt, new dummy commitment, and opened unused dummy votes *)
+    in(channelBBandTest, (d1: dvote, d2: dvote, zkp: bitstring,receiptVA: bitstring, newdummy: dvote, zkp2: bitstring, (val0: bitstring, rand0: bitstring), (val1: bitstring, rand1: bitstring), sessionIdv'':bitstring, BBinstance: bitstring));
+
+    let messageReceiptVA=checksign(receiptVA, vapk) in
+    let (ca: bitstring, cb: bitstring, ra: bitstring, rb:bitstring, barcodeR: bitstring, sessionIdv': bitstring)=messageReceiptVA in
+    let messageReceiptVoter=checksign(receiptVoter, vapk) in
+    let (=receiptVA, =BBinstance, =sessionIdv)=checksign(VoterBBreceipt, bbpkey) in (* be sure Voter and Test see the same data on the BB *)
+    let (ca': bitstring, cb': bitstring, ra': bitstring, rb':bitstring, barcodeR': bitstring, =sessionIdv'')=checksign(receiptVoter, vapk) in
+    if (messageReceiptVoter=messageReceiptVA) then event NoBlame(receiptVoter,BBinstance,sessionIdv )
+    else event Blame(receiptVoter,BBinstance, sessionIdv).
+
+(*///////////////////   Main //////////*)
+process
+
+!(
+(* vm key *)
+new vmsecretkey: secretKey; let vmpublickey = signedPublicKey(vmsecretkey) in out(ch, vmpublickey);
+
+(* trg key *)
+new trgsecretkey: secretKey; let trgpublickey = signedPublicKey(trgsecretkey) in out (ch, trgpublickey);
+
+(* BB key *)
+new bbsecretkey: secretKey; let bbpublickey = signedPublicKey(bbsecretkey) in out (ch, bbpublickey);
+
+(* voter key for signature of the paper ballot *)
+new vsecretkey: secretKey; let vpublickey = signedPublicKey(vsecretkey) in out(ch, vpublickey);
+
+(* private channels for communication *)
+new channelvoterandva: channel;
+new channelvoterandtrg: channel;
+new channeltrgandmachine: channel;
+new channelvaprep: channel;
+new channelvareceipts: channel;
+new channeltrgandtest: channel;
+new channelvoterandtest: channel;
+new channelBBandTest: channel;
+new channelVAandTest: channel;
+
+
+(* Dishonest voter *)
+out(ch, channelvoterandva);
+out(ch, channelvoterandtrg);
+out(ch, channelvoterandtest);
+out(ch, vsecretkey);
+!(
+new sessionidv: bitstring;
+out(ch, sessionidv);
+
+(VotingAuthority(sessionidv, channelVAandTest,channelvaprep,channelvareceipts, channelvoterandva, channeltrgandmachine, vmsecretkey, trgpublickey, vpublickey )) |
+
+
+(TRG(sessionidv,trgsecretkey,channelvoterandtrg,channeltrgandmachine, channeltrgandtest)) | 
+
+(* Dishonest voter *)
+(*(Voter(sessionidv,candidate0, trgpublickey, vmpublickey, channelvoterandtrg, channelvoterandva, channelvoterandtest, bbpublickey)) | *)
+
+(Bulletin(sessionidv,channelvaprep,channelvareceipts, channelBBandTest, bbsecretkey)) |
+
+(test(sessionidv, vmpublickey,channelvoterandtest,channelBBandTest, bbpublickey ))
+
+)
+)
+
+
+

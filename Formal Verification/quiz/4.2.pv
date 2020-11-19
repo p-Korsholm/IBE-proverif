@@ -1,0 +1,19 @@
+channel c.
+
+type skey. 
+type pkey.
+ 
+free s : bitstring.
+free k : skey. 
+
+fun pk(skey): pkey. 
+fun aenc(bitstring, pkey): bitstring. 
+reduc forall x:bitstring, y:skey; 
+		adec(aenc(x, pk(y)), y) = x. 
+
+process
+	in(c, x:bitstring);
+	in(c, y:bitstring); 
+	out(c, pk(k)); 
+	if x <> y then 
+	out(c, aenc(diff[(x,y,s), (x,y)], pk(k)))

@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+                      <html>
+                    <head>
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+                    <title>ProVerif: main result page</title>
+                    <link rel="stylesheet" href="cssproverif.css">
+                                                                           </head>
+                                                                         <body>
+                                                                         <H1>ProVerif results</H1>
+<A HREF="process_0.html" TARGET="process">Process 0</A> (that is, the initial process)<br>
+<UL>
+<LI><A HREF="process_1.html" TARGET="process">Process 1</A> (that is, <A HREF="process_0.html" TARGET="process">process 0</A>, with let moved downwards)<br>
+<UL> <LI><span class="query">Query <span class="keyword">not </span>event(<span class="fun">BB</span>(<span class="var">b</span>,<span class="var">i</span>,<span class="var">s</span>)); <span class="keyword">not </span>event(<span class="fun">VoterChoice</span>(<span class="var">v</span>,<span class="var">s</span>)) in <A HREF="process_1.html" TARGET="process">process 1</A>.<br>
+</span>
+<A HREF="lemmas1.html" TARGET="lemmas">Lemmas</A><br>
+<A HREF="clauses1.html" TARGET="clauses">Clauses</A><br>
+<A HREF="compclauses1.html">Completed clauses</A><br>
+<UL>
+<LI><span class="query">Query <span class="keyword">not </span>event(<span class="fun">BB</span>(<span class="var">b</span>,<span class="var">i</span>,<span class="var">s</span>))</span><br>
+<UL>
+<LI>goal reachable: <span class="pred">begin</span>(<span class="fun">@p_act</span>(<span class="var">@occ47_1</span>,<span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>))) <span class="conn">&amp;&amp;</span> <span class="pred">begin</span>(<span class="fun">@p_act</span>(<span class="var">@occ116_1</span>,<span class="fun"></span>(<span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="fun">candidate1</span>,<span class="var">freshRandomNumber_4</span>,<span class="var">dummyRandomNumber2_1</span>,<span class="var">barCode_1</span>,<span class="var">sessionidv_3</span>),<span class="var">vmsecretkey_1</span>),<span class="fun">dummyVotePair</span>(<span class="fun">commitValue</span>(<span class="var">freshRandomNumber_4</span>,<span class="var">rr3_2</span>),<span class="fun">commitValue</span>(<span class="fun">candidate0</span>,<span class="var">rc3_2</span>)),<span class="fun">pzk2</span>(<span class="fun">candidate0</span>,<span class="fun">candidate1</span>,<span class="var">dummyRandomNumber2_1</span>,<span class="fun">dummyVotePair</span>(<span class="fun">commitValue</span>(<span class="var">freshRandomNumber_4</span>,<span class="var">rr3_2</span>),<span class="fun">commitValue</span>(<span class="fun">candidate0</span>,<span class="var">rc3_2</span>)),<span class="fun">dummyVotePair</span>(<span class="fun">commitValue</span>(<span class="var">dummyRandomNumber2_1</span>,<span class="var">rand2rand2_1</span>),<span class="fun">commitValue</span>(<span class="fun">candidate1</span>,<span class="var">rand2Candidate2_1</span>)),<span class="var">rand2Candidate2_1</span>,<span class="var">rc3_2</span>,<span class="var">rand2rand2_1</span>,<span class="var">rr3_2</span>),<span class="fun">dummyVotePair</span>(<span class="fun">commitValue</span>(<span class="var">dummyRandomNumber1_1</span>,<span class="var">rand1rand1_1</span>),<span class="fun">commitValue</span>(<span class="fun">candidate0</span>,<span class="var">rand1Candidate1_1</span>)),<span class="var">sessionidv_3</span>))) <span class="conn">-&gt;</span> <span class="pred">end</span>(<span class="fun">BB</span>(<span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="fun">candidate1</span>,<span class="var">freshRandomNumber_4</span>,<span class="var">dummyRandomNumber2_1</span>,<span class="var">barCode_1</span>,<span class="var">sessionidv_3</span>),<span class="var">vmsecretkey_1</span>),<span class="var">BBinstance_3</span>,<span class="var">sessionidv_3</span>))<br>
+Abbreviations:
+<ul>
+
+<li><span class="var">freshRandomNumber_4</span> <span class="conn">=</span> <span class="name">freshRandomNumber_1</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">dummyRandomNumber2_1</span> <span class="conn">=</span> <span class="name">dummyRandomNumber2</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">sessionidv_3</span> <span class="conn">=</span> <span class="name">sessionidv</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">trgsecretkey_1</span> <span class="conn">=</span> <span class="name">trgsecretkey</span>[!1 = <span class="var">@sid_1</span>]
+<li><span class="var">vsecretkey_1</span> <span class="conn">=</span> <span class="name">vsecretkey</span>[!1 = <span class="var">@sid_1</span>]
+<li><span class="var">barCode_1</span> <span class="conn">=</span> <span class="name">barCode</span>[randomWithSignature = <span class="fun">sign</span>(<span class="fun"></span>(<span class="var">freshRandomNumber_4</span>,<span class="var">sessionidv_3</span>),<span class="var">trgsecretkey_1</span>),signedcand = <span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>),!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">vmsecretkey_1</span> <span class="conn">=</span> <span class="name">vmsecretkey</span>[!1 = <span class="var">@sid_1</span>]
+<li><span class="var">dummyRandomNumber1_1</span> <span class="conn">=</span> <span class="name">dummyRandomNumber1</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">rand1rand1_1</span> <span class="conn">=</span> <span class="name">rand1rand1</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">rand1Candidate1_1</span> <span class="conn">=</span> <span class="name">rand1Candidate1</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">rr3_2</span> <span class="conn">=</span> <span class="name">rr3</span>[randomWithSignature = <span class="fun">sign</span>(<span class="fun"></span>(<span class="var">freshRandomNumber_4</span>,<span class="var">sessionidv_3</span>),<span class="var">trgsecretkey_1</span>),signedcand = <span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>),!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">rc3_2</span> <span class="conn">=</span> <span class="name">rc3</span>[randomWithSignature = <span class="fun">sign</span>(<span class="fun"></span>(<span class="var">freshRandomNumber_4</span>,<span class="var">sessionidv_3</span>),<span class="var">trgsecretkey_1</span>),signedcand = <span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>),!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">rand2rand2_1</span> <span class="conn">=</span> <span class="name">rand2rand2</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">rand2Candidate2_1</span> <span class="conn">=</span> <span class="name">rand2Candidate2</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">BBinstance_3</span> <span class="conn">=</span> <span class="name">BBinstance_2</span>[unusedDvote = <span class="fun">dummyVotePair</span>(<span class="fun">commitValue</span>(<span class="var">dummyRandomNumber1_1</span>,<span class="var">rand1rand1_1</span>),<span class="fun">commitValue</span>(<span class="fun">candidate0</span>,<span class="var">rand1Candidate1_1</span>)),zkp2 = <span class="fun">pzk2</span>(<span class="fun">candidate0</span>,<span class="fun">candidate1</span>,<span class="var">dummyRandomNumber2_1</span>,<span class="fun">dummyVotePair</span>(<span class="fun">commitValue</span>(<span class="var">freshRandomNumber_4</span>,<span class="var">rr3_2</span>),<span class="fun">commitValue</span>(<span class="fun">candidate0</span>,<span class="var">rc3_2</span>)),<span class="fun">dummyVotePair</span>(<span class="fun">commitValue</span>(<span class="var">dummyRandomNumber2_1</span>,<span class="var">rand2rand2_1</span>),<span class="fun">commitValue</span>(<span class="fun">candidate1</span>,<span class="var">rand2Candidate2_1</span>)),<span class="var">rand2Candidate2_1</span>,<span class="var">rc3_2</span>,<span class="var">rand2rand2_1</span>,<span class="var">rr3_2</span>),newDummyVote3 = <span class="fun">dummyVotePair</span>(<span class="fun">commitValue</span>(<span class="var">freshRandomNumber_4</span>,<span class="var">rr3_2</span>),<span class="fun">commitValue</span>(<span class="fun">candidate0</span>,<span class="var">rc3_2</span>)),receipt_3 = <span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="fun">candidate1</span>,<span class="var">freshRandomNumber_4</span>,<span class="var">dummyRandomNumber2_1</span>,<span class="var">barCode_1</span>,<span class="var">sessionidv_3</span>),<span class="var">vmsecretkey_1</span>),zkp_1 = <span class="fun">pzk1</span>(<span class="fun">candidate0</span>,<span class="fun">candidate1</span>,<span class="var">rand1Candidate1_1</span>,<span class="var">rand2Candidate2_1</span>,<span class="fun">commitValue</span>(<span class="fun">candidate0</span>,<span class="var">rand1Candidate1_1</span>),<span class="fun">commitValue</span>(<span class="fun">candidate1</span>,<span class="var">rand2Candidate2_1</span>)),dummyVote2 = <span class="fun">dummyVotePair</span>(<span class="fun">commitValue</span>(<span class="var">dummyRandomNumber2_1</span>,<span class="var">rand2rand2_1</span>),<span class="fun">commitValue</span>(<span class="fun">candidate1</span>,<span class="var">rand2Candidate2_1</span>)),dummyVote1 = <span class="fun">dummyVotePair</span>(<span class="fun">commitValue</span>(<span class="var">dummyRandomNumber1_1</span>,<span class="var">rand1rand1_1</span>),<span class="fun">commitValue</span>(<span class="fun">candidate0</span>,<span class="var">rand1Candidate1_1</span>)),!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">@occ47_1</span> <span class="conn">=</span> <span class="name">@occ47</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">@occ116_1</span> <span class="conn">=</span> <span class="name">@occ116</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+</ul>
+<A HREF="derivation1.html">Derivation</A> <A HREF="derivationexplained1.html">Explained derivation</A><br>
+<A HREF="unifyDeriv1.html" TARGET="unifderiv">Unify derivation</A><br>
+Could not find a trace corresponding to this derivation.<br>
+</UL>
+<span class="result">RESULT <span class="keyword">not </span>event(<span class="fun">BB</span>(<span class="var">b</span>,<span class="var">i</span>,<span class="var">s</span>)) <span class="unknownresult">cannot be proved</span>.</span><br>
+<LI><span class="query">Query <span class="keyword">not </span>event(<span class="fun">VoterChoice</span>(<span class="var">v</span>,<span class="var">s</span>))</span><br>
+<UL>
+<LI>goal reachable: <span class="pred">end</span>(<span class="fun">VoterChoice</span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>))<br>
+Abbreviations:
+<ul>
+
+<li><span class="var">sessionidv_3</span> <span class="conn">=</span> <span class="name">sessionidv</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+</ul>
+<A HREF="derivation2.html">Derivation</A> <A HREF="derivationexplained2.html">Explained derivation</A><br>
+<A HREF="unifyDeriv2.html" TARGET="unifderiv">Unify derivation</A><br>
+<A HREF="trace2.html">Trace</A><br>
+<A HREF="trace2.pdf">Trace graph</A><br>
+</UL>
+<span class="result">RESULT <span class="keyword">not </span>event(<span class="fun">VoterChoice</span>(<span class="var">v</span>,<span class="var">s</span>)) is <span class="falseresult">false</span>.</span><br>
+</UL>
+<LI><span class="query">Query <span class="keyword">not </span>event(<span class="fun">OKv</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>)); <span class="keyword">not </span>event(<span class="fun">KOv</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>)); <span class="keyword">not </span>event(<span class="fun">OKt</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>)); <span class="keyword">not </span>event(<span class="fun">KOt</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>)) in <A HREF="process_1.html" TARGET="process">process 1</A>.<br>
+</span>
+<A HREF="lemmas2.html" TARGET="lemmas">Lemmas</A><br>
+<A HREF="clauses2.html" TARGET="clauses">Clauses</A><br>
+<A HREF="compclauses2.html">Completed clauses</A><br>
+<UL>
+<LI><span class="query">Query <span class="keyword">not </span>event(<span class="fun">OKv</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>))</span><br>
+<UL>
+<LI>goal reachable: <span class="pred">begin</span>(<span class="fun">@p_act</span>(<span class="var">@occ47_2</span>,<span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>))) <span class="conn">-&gt;</span> <span class="pred">end</span>(<span class="fun">OKv</span>(<span class="var">freshRandomNumber_4</span>,<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>))<br>
+Abbreviations:
+<ul>
+
+<li><span class="var">freshRandomNumber_4</span> <span class="conn">=</span> <span class="name">freshRandomNumber_1</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">sessionidv_3</span> <span class="conn">=</span> <span class="name">sessionidv</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">@occ47_2</span> <span class="conn">=</span> <span class="name">@occ47_1</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">vsecretkey_1</span> <span class="conn">=</span> <span class="name">vsecretkey</span>[!1 = <span class="var">@sid_1</span>]
+</ul>
+<A HREF="derivation3.html">Derivation</A> <A HREF="derivationexplained3.html">Explained derivation</A><br>
+<A HREF="unifyDeriv3.html" TARGET="unifderiv">Unify derivation</A><br>
+<A HREF="trace3.html">Trace</A><br>
+<A HREF="trace3.pdf">Trace graph</A><br>
+</UL>
+<span class="result">RESULT <span class="keyword">not </span>event(<span class="fun">OKv</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>)) is <span class="falseresult">false</span>.</span><br>
+<LI><span class="query">Query <span class="keyword">not </span>event(<span class="fun">KOv</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>))</span><br>
+<span class="result">RESULT <span class="keyword">not </span>event(<span class="fun">KOv</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>)) is <span class="trueresult">true</span>.</span><br>
+<LI><span class="query">Query <span class="keyword">not </span>event(<span class="fun">OKt</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>))</span><br>
+<UL>
+<LI>goal reachable: <span class="pred">begin</span>(<span class="fun">@p_act</span>(<span class="var">@occ129_2</span>,<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="fun">candidate1</span>,<span class="var">freshRandomNumber_4</span>,<span class="var">dummyRandomNumber2_1</span>,<span class="var">barCode_1</span>,<span class="var">sessionidv_3</span>),<span class="var">vmsecretkey_1</span>),<span class="var">sessionidv_3</span>))) <span class="conn">&amp;&amp;</span> <span class="pred">begin</span>(<span class="fun">@p_act</span>(<span class="var">@occ47_2</span>,<span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>))) <span class="conn">-&gt;</span> <span class="pred">end</span>(<span class="fun">OKt</span>(<span class="var">freshRandomNumber_4</span>,<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>))<br>
+Abbreviations:
+<ul>
+
+<li><span class="var">freshRandomNumber_4</span> <span class="conn">=</span> <span class="name">freshRandomNumber_1</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">sessionidv_3</span> <span class="conn">=</span> <span class="name">sessionidv</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">@occ129_2</span> <span class="conn">=</span> <span class="name">@occ129_1</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">dummyRandomNumber2_1</span> <span class="conn">=</span> <span class="name">dummyRandomNumber2</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">trgsecretkey_1</span> <span class="conn">=</span> <span class="name">trgsecretkey</span>[!1 = <span class="var">@sid_1</span>]
+<li><span class="var">vsecretkey_1</span> <span class="conn">=</span> <span class="name">vsecretkey</span>[!1 = <span class="var">@sid_1</span>]
+<li><span class="var">barCode_1</span> <span class="conn">=</span> <span class="name">barCode</span>[randomWithSignature = <span class="fun">sign</span>(<span class="fun"></span>(<span class="var">freshRandomNumber_4</span>,<span class="var">sessionidv_3</span>),<span class="var">trgsecretkey_1</span>),signedcand = <span class="fun">sign</span>(<span class="fun"></span>(<span class="fun">candidate0</span>,<span class="var">sessionidv_3</span>),<span class="var">vsecretkey_1</span>),!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+<li><span class="var">vmsecretkey_1</span> <span class="conn">=</span> <span class="name">vmsecretkey</span>[!1 = <span class="var">@sid_1</span>]
+<li><span class="var">@occ47_2</span> <span class="conn">=</span> <span class="name">@occ47_1</span>[!2 = <span class="var">@sid</span>,!1 = <span class="var">@sid_1</span>]
+</ul>
+<A HREF="derivation4.html">Derivation</A> <A HREF="derivationexplained4.html">Explained derivation</A><br>
+<A HREF="unifyDeriv4.html" TARGET="unifderiv">Unify derivation</A><br>
+<A HREF="trace4.html">Trace</A><br>
+<A HREF="trace4.pdf">Trace graph</A><br>
+</UL>
+<span class="result">RESULT <span class="keyword">not </span>event(<span class="fun">OKt</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>)) is <span class="falseresult">false</span>.</span><br>
+<LI><span class="query">Query <span class="keyword">not </span>event(<span class="fun">KOt</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>))</span><br>
+<span class="result">RESULT <span class="keyword">not </span>event(<span class="fun">KOt</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>)) is <span class="trueresult">true</span>.</span><br>
+</UL>
+</UL> </UL>
+<br>
+<HR>
+<H2>Verification summary:</H2>
+<UL>
+<LI>Query <span class="keyword">not </span>event(<span class="fun">BB</span>(<span class="var">b</span>,<span class="var">i</span>,<span class="var">s</span>)) <span class="unknownresult">cannot be proved</span>.
+<LI>Query <span class="keyword">not </span>event(<span class="fun">VoterChoice</span>(<span class="var">v</span>,<span class="var">s</span>)) is <span class="falseresult">false</span>.
+<LI>Query <span class="keyword">not </span>event(<span class="fun">OKv</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>)) is <span class="falseresult">false</span>.
+<LI>Query <span class="keyword">not </span>event(<span class="fun">KOv</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>)) is <span class="trueresult">true</span>.
+<LI>Query <span class="keyword">not </span>event(<span class="fun">OKt</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>)) is <span class="falseresult">false</span>.
+<LI>Query <span class="keyword">not </span>event(<span class="fun">KOt</span>(<span class="var">a</span>,<span class="var">b</span>,<span class="var">c</span>)) is <span class="trueresult">true</span>.
+</UL><HR>
+</body>
+</html>
