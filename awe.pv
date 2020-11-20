@@ -1,12 +1,15 @@
 channel c.
-free SI: channel.
+free SI: channel[private].
 free ID: channel[private].
 free IA: channel[private].
 free DA: channel[private].
+
 free ST: channel[private].
 free IT: channel[private].
+free DT: channel[private].
 
 type id.
+type sessionid.
 type mkp.
 type skp.
 type ski.
@@ -20,7 +23,6 @@ reduc forall x:bitstring, iid: id, mkey: skp, y: ski;
 
 (*
  *  EVENTS
- *
 *)
 
 event endS().
@@ -31,40 +33,49 @@ event decryptionStarted(bitstring).
 event decryptionReceived(bitstring).
 event auditorBullet(bitstring, bitstring).
 
-event KOt(bitstring, id, bitstring, id, bitstring).
-event KOt'(bitstring, id, bitstring, bitstring).
-event OKt(bitstring, id, bitstring, id, bitstring).
-event OKt'(bitstring, id, bitstring, bitstring).
+event BlameA(bitstring, id, bitstring, id).
+event BlameB(bitstring, id, bitstring, id).
+event BlameC(bitstring, id, bitstring, id).
+event NoBlameA(bitstring, id).
+event NoBlameB(bitstring, id).
+event NoBlameC(bitstring, id).
+
+event KOt(bitstring, id, bitstring, id, bitstring, id).
+event OKt(bitstring, id, bitstring, id, bitstring, id).
 
 (*
  *  QUERIES
  *
-*)
+ *)
+
 query event (endS()).
 query event (endICJ()).
 query event (endDecAuth()).
 query event (endA()).
 
-query data:bitstring, host:id, data':bitstring, ct:bitstring;
-  event (KOt'(data, host, data', ct));
-  event (OKt'(data, host, data', ct)).
+query data:bitstring, host:id, data':bitstring, host':id, data'':bitstring, host'':id;
+  event (BlameA(data', host', data, host));
+  event (BlameB(data, host, data', host'));
+  event (BlameC(data, host, data'', host''));
+  event (KOt(data, host, data, host, data, host)).
 
 query a:bitstring;
   event (decryptionReceived(a)) ==> event (decryptionStarted(a)).
 
 (* data Source *)
-let pS(mpk:mkp) =
+let pS(mpk:mkp, sessionkey:sessionid) =
   new data: bitstring;
   new host: id;
-  out(ST, (data, host));
-  event decryptionStarted(data);
-  out(SI, (encIBE(mpk, host, data), host));
+  out(ST, (data, host, sessionkey));
+  let ct = encIBE(mpk, host, data) in
+  (*event decryptionStarted(data);*)
+  out(SI, (ct, host));
   event endS().
 
 (* Investigator, Judge, Court *)
-let pICJ =
+let pICJ(sessionkey:sessionid) =
   in(SI, (ct:bitstring, host: id));
-  out(IT, (ct, host));
+  out(IT, (ct, host, sessionkey));
   out(IA, (ct, host));
   out(ID, (ct, host));
   in(ID, skeyi:ski);
@@ -72,22 +83,26 @@ let pICJ =
     event decryptionReceived(x);
   event endICJ().
 
-let decAuth(skey:skp) =
-  out(c, pk(skey));
+let decAuth(skey:skp, sessionkey:sessionid) =
   in(ID, (ct:bitstring, host:id));
-
+  out(DT, (ct, host, sessionkey));
   out(DA, (ct, host));
   in(DA, exists:bool);
   if exists then
     out(ID, getSki(skey, host));
   event endDecAuth().
 
+
   (* get input
   output event
   output public
-  output for test *)
+  output for test
+
+  TODO: should PA log only id? look into protocol
+
+   *)
 (* Auditor *)
-let pA =
+let pA(sessionkey:sessionid)=
   in(IA, (ct:bitstring, host:id));
   in(DA, (ct':bitstring, host':id));
   if (ct <> ct') && (host<> host') then
@@ -97,19 +112,36 @@ let pA =
   event auditorBullet((ct, host), (ct', host'));
   event endA().
 
-(* Tester *)
-let pT(skey:skp) =
-  in(ST, (data:bitstring, host:id));
-  in(IT, (ct:bitstring, =host));
+  (* Tester *)
+let py(skey:skp, sessionkey:sessionid) =
+  in(ST, (ct:bitstring, host:id, =sessionkey));
+  in(IT, (ct':bitstring, host':id, =sessionkey));
+  in(DT, (ct'':bitstring, host'':id, =sessionkey));
 
-  let data':bitstring = decIBE(ct, getSki(skey, host)) in
-  if data <> data' then (*)&& host <> host' then*)
-    event KOt'(data, host, data', ct)
+  let data:bitstring = decIBE(ct, getSki(skey, host)) in
+  let data':bitstring = decIBE(ct', getSki(skey, host')) in
+  let data'':bitstring = decIBE(ct'', getSki(skey, host'')) in
+  (* if a = b *)
+  if (data = data' && host = host') then
+    if (data' = data'' && host' = host'') then event OKt(data, host, data', host', data'', host'')
+    else event BlameC(data,host, data'', host'') ; event NoBlameA(data, host) ; event NoBlameB(data', host')
   else
-    event OKt'(data, host, data', ct);
+    if (data' = data'' && host' = host'') then event BlameB(data',host', data, host) ; event NoBlameA(data', host') ; event NoBlameC(data'', host'') (*  S != I, I == D  *)
+    else
+      (* if (data = data'' && host = host'') then (* S == D, S != I *) (*)
+        event BlameB(data, host, data', host') ; event NoBlameA(data, host) ; event NoBlameC(data'', host'')
+      else *)
+      event KOt(data, host, data', host', data'', host'').
+
+(* Tester *)
+let pT(skey:skp, sessionkey:sessionid) =
+  in(ST, (ct:bitstring, host:id, =sessionkey));
   0.
 
 process
-	! new skey:skp ;(
-	! out(c, pk(skey))  | pA() | decAuth(skey) | pICJ() | pS(pk(skey)) | pT(skey)
-	)
+	! (new skey:skp ;
+     new sessionkey:sessionid;
+    (
+  	   out(c, pk(skey)) | pS(pk(skey),sessionkey) | pA(sessionkey) | decAuth(skey, sessionkey) | pICJ(sessionkey) | pT(skey, sessionkey)
+  	)
+  )

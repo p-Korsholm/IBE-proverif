@@ -6,8 +6,8 @@
 query b:bitstring, v: bitstring, i: bitstring, s: bitstring;
     event (BB(b,i,s));
     event (VoterChoice(v,s)).
-    
-query a: bitstring, b: bitstring, c: bitstring; 
+
+query a: bitstring, b: bitstring, c: bitstring;
     event (OKv(a,b,c));
     event (KOv(a,b,c));
     event(NoBlameAlign(a,b,c));
@@ -17,7 +17,7 @@ query a: bitstring, b: bitstring, c: bitstring;
     event  (BlameAlign(a,b,c));
     event  (BlameEnc(a,b,c));
     (* Completeness *)
-    inj-event(NoBlameAlign(a,b,c)) && inj-event(NoBlameEnc(a,b,c)) ==> inj-event(OKv(a,b,c)). 
+    inj-event(NoBlameAlign(a,b,c)) && inj-event(NoBlameEnc(a,b,c)) ==> inj-event(OKv(a,b,c)).
 
 
 
@@ -25,7 +25,7 @@ query a: bitstring, b: bitstring, c: bitstring;
 let test(sessionIdv: bitstring, vpk:publicKey, vapk:publicKey, channelVAandTest: channel,channelVoterandTest: channel, channelTRGAndTest: channel, trgpk: publicKey)=
     in(channelTRGAndTest, (randomWithSignature: bitstring, =sessionIdv));
     (*takes in  receipt  from the voter *)
-    in(channelVoterandTest, (candidateX: bitstring, receiptVoter: bitstring, =sessionIdv)) [precise]; 
+    in(channelVoterandTest, (candidateX: bitstring, receiptVoter: bitstring, =sessionIdv)) [precise];
     (*takes in paper ballot from VA *)
     in(channelVAandTest, (paper_ballot:bitstring, =sessionIdv)) [precise];
     let (freshRandomNumber: bitstring, =sessionIdv)=checksign(randomWithSignature, trgpk) in
@@ -33,7 +33,7 @@ let test(sessionIdv: bitstring, vpk:publicKey, vapk:publicKey, channelVAandTest:
     let (cx: bitstring, sessionIdv':bitstring)=checksign(paper_ballot_voter, vpk) in
     let (ca: bitstring, cb: bitstring, ra: bitstring, rb:bitstring, barcodeR': bitstring, sessionIdv'':bitstring)=checksign(receiptVoter, vapk) in
     if barcodeR<>barcodeR' then
-    (  ( 
+    (  (
         if (ca=candidate0 && cb=candidate1) then event NoBlameAlign(freshRandomNumber,cx,sessionIdv)
         else event BlameAlign(freshRandomNumber,cx,sessionIdv)
       ) |
@@ -42,7 +42,7 @@ let test(sessionIdv: bitstring, vpk:publicKey, vapk:publicKey, channelVAandTest:
         else event BlameEnc(freshRandomNumber,cx,sessionIdv)
       )
     )
-    else event NoBlameEnc(freshRandomNumber,cx,sessionIdv). 
+    else event NoBlameEnc(freshRandomNumber,cx,sessionIdv).
 
 (*///////////////////   Main //////////*)
 process
@@ -86,7 +86,7 @@ out(ch, sessionidv);
 
 (VotingAuthority(sessionidv, channelVAandTest,channelvaprep,channelvareceipts, channelvoterandva, channeltrgandmachine, vmsecretkey, trgpublickey, vpublickey )) |
 
-(TRG(sessionidv,trgsecretkey,channelvoterandtrg,channeltrgandmachine, channeltrgandtest)) | 
+(TRG(sessionidv,trgsecretkey,channelvoterandtrg,channeltrgandmachine, channeltrgandtest)) |
 
 (Voter(sessionidv,vsecretkey,candidate0, trgpublickey, vmpublickey, channelvoterandtrg, channelvoterandva, channelvoterandtest, bbpublickey)) |
 
@@ -96,6 +96,3 @@ out(ch, sessionidv);
 
 )
 )
-
-
-
