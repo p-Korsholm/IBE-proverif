@@ -13,9 +13,12 @@ type sessionid.
 type mkp.
 type skp.
 type ski.
+type commitment.
 
 type secretKey.
 type publicKey.
+
+const ok.
 
 (* IBE *)
 fun pk(skp): mkp.
@@ -24,6 +27,20 @@ fun encIBE(mkp, id, bitstring) : bitstring.
 fun getSki(skp, id): ski.
 reduc forall x:bitstring, iid: id, mkey: skp, y: ski;
   decIBE(encIBE(pk(mkey), iid, x), getSki(mkey, iid)) = x.
+
+fun commit(id): commitment.
+
+fun privzkp(id, commit(id)).
+
+reduc forall iid: id;
+  pubzkp(commit(id), privzkp(iid, commit(iid))) = ok.
+
+
+fun encIBE(mkp, id, bitstring) : bitstring.
+fun getSki(skp, id): ski.
+reduc forall x:bitstring, iid: id, mkey: skp, y: ski;
+  decIBE(encIBE(pk(mkey), iid, x), getSki(mkey, commitment)) = x.
+
 
 
 (* Signatures *)
