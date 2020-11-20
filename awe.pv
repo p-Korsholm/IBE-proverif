@@ -56,7 +56,6 @@ event OKt(bitstring, id, bitstring, id, bitstring, id).
 
 (*
  *  QUERIES
- *
  *)
 
 query event (endS()).
@@ -77,7 +76,7 @@ query a:bitstring;
 *)
 
 (* data Source *)
-let pS(mpk:mkp, sessionkey:sessionid, data:bitstring, host:id, pSKey:secretKey)=
+let pS(mpk:mkp, sessionkey:sessionid, data:bitstring, host:id, pSKey:secretKey) =
   let pkey = signedPublicKey(pSKey) in
   out(c, pkey);
   let ct = encIBE(mpk, host, data) in
@@ -86,7 +85,7 @@ let pS(mpk:mkp, sessionkey:sessionid, data:bitstring, host:id, pSKey:secretKey)=
   event endS().
 
 (* Investigator, Judge, Court *)
-let pICJ(sessionkey:sessionid, Spkey:publicKey, pIKey:secretKey)=
+let pICJ(sessionkey:sessionid, Spkey:publicKey, pIKey:secretKey) =
   let pkey = signedPublicKey(pIKey) in
   out(c, pkey);
   in(SI, m:bitstring);
@@ -94,7 +93,7 @@ let pICJ(sessionkey:sessionid, Spkey:publicKey, pIKey:secretKey)=
 
   out(IT, (ct, host, sessionkey, m));
   out(IA, (ct, host, sessionkey));
-  out(ID, (ct, host, sessionkey));
+  out(ID, sign((ct, host, sessionkey), pIKey));
 
   in(ID, (skeyi:ski, =sessionkey));
 
@@ -103,9 +102,13 @@ let pICJ(sessionkey:sessionid, Spkey:publicKey, pIKey:secretKey)=
 let decAuth(skey:skp, sessionkey:sessionid, Ipkey:publicKey, pDKey:secretKey)=
   let pkey = signedPublicKey(pDKey) in
   out(c, pkey);
-  in(ID, (ct:bitstring, host:id, =sessionkey));
-  out(DT, (ct, host, sessionkey));
-  out(DA, (ct, host, sessionkey));
+
+  in(ID, m:bitstring);
+
+  let (ct:bitstring, host:id, =sessionkey) = checksign(m, Ipkey) in
+    out(DT, (ct, host, sessionkey, m)) |
+    out(DA, (ct, host, sessionkey));
+
   in(DA, exists:bool);
   if exists then
     out(ID, (getSki(skey, host), sessionkey));
@@ -125,19 +128,39 @@ let pA(sessionkey:sessionid, pAKey:secretKey)=
   event endA().
 
   (* Tester *)
-let pT(skey:skp, sessionkey:sessionid, psKey:publicKey, pAKey:publicKey, pIKey:publicKey, pDKey:publicKey) =
+let pTI(skey:skp, sessionkey:sessionid, psKey:publicKey, pAKey:publicKey, pIKey:publicKey, pDKey:publicKey) =
   in(ST, (ctS:bitstring, hostS:id, =sessionkey));
-  in(IT, (ctI:bitstring, hostI:id, =sessionkey, m:bitstring));
-  in(DT, (ctD:bitstring, hostD:id, =sessionkey));
+  in(IT, (ctI:bitstring, hostI:id, =sessionkey, mS:bitstring));
+  in(DT, (ctD:bitstring, hostD:id, =sessionkey, mI:bitstring));
 
   let dataS:bitstring = decIBE(ctS, getSki(skey, hostS)) in
   let dataI:bitstring = decIBE(ctI, getSki(skey, hostI)) in
   let dataD:bitstring = decIBE(ctD, getSki(skey, hostD)) in
 
-  let (ct_signedS:bitstring, host_signedS: id, sessionkey:sessionid) = checksign(m, psKey) in
-  if(ctS<>ct_signedS) || (host_signedS<>hostS) then
-    event BlameA(dataS, hostS, decIBE(ct_signedS, getSki(skey, hostS)), host_signedS) ; event NoBlameA(dataS, hostS) ; event NoBlameC(dataD, hostD).
+  let (ct_signedS:bitstring, host_signedS: id, sessionkey:sessionid) = checksign(mS, psKey) in
+  let (ct_signedI:bitstring, host_signedI: id, sessionkey:sessionid) = checksign(mI, pIKey) in
 
+  if(ctI<>ct_signedI) || (host_signedI<>hostI) then
+    event BlameB(dataI, hostI, decIBE(ct_signedI, getSki(skey, hostI)), host_signedI) ; event NoBlameA(dataS, hostS) ; event NoBlameC(dataD, hostD).
+
+
+  (* Tester *)
+let pTS(skey:skp, sessionkey:sessionid, psKey:publicKey, pAKey:publicKey, pIKey:publicKey, pDKey:publicKey) =
+  in(ST, (ctS:bitstring, hostS:id, =sessionkey));
+  in(IT, (ctI:bitstring, hostI:id, =sessionkey, mS:bitstring));
+  in(DT, (ctD:bitstring, hostD:id, =sessionkey, mI:bitstring));
+
+  let dataS:bitstring = decIBE(ctS, getSki(skey, hostS)) in
+  let dataI:bitstring = decIBE(ctI, getSki(skey, hostI)) in
+  let dataD:bitstring = decIBE(ctD, getSki(skey, hostD)) in
+
+  let (ct_signedS:bitstring, host_signedS: id, sessionkey:sessionid) = checksign(mS, psKey) in
+  let (ct_signedI:bitstring, host_signedI: id, sessionkey:sessionid) = checksign(mI, pIKey) in
+
+  if(ctS<>ct_signedS) || (host_signedS<>hostS) then
+    event BlameA(dataS, hostS, decIBE(ct_signedS, getSki(skey, hostS)), host_signedS) ; event NoBlameB(dataS, hostS) ; event NoBlameC(dataD, hostD)
+  else
+    event NoBlameA(dataS, hostS).
 
   (* if a = b
   if (dataS = dataI && hostS = hostI) then
@@ -151,11 +174,6 @@ let pT(skey:skp, sessionkey:sessionid, psKey:publicKey, pAKey:publicKey, pIKey:p
       else *)
       (*event KOt(dataS, hostS, dataI, hostI, dataD, hostD).*)
 
-(* Tester *)
-let py(skey:skp, sessionkey:sessionid) =
-  in(ST, (ct:bitstring, host:id, =sessionkey));
-  0.
-
 process
 	! (new skey:skp ;
      new psKey:secretKey; new pAKey:secretKey; new pIKey:secretKey; new pDKey:secretKey;
@@ -163,7 +181,12 @@ process
      new host:id;
      new sessionkey:sessionid;
     (
-  	   out(c, pk(skey)) | pS(pk(skey),sessionkey,data, host, psKey) | pA(sessionkey, pAKey) | decAuth(skey, sessionkey, signedPublicKey(pIKey), pDKey) | pICJ(sessionkey, signedPublicKey(psKey), pIKey) |
-       pT(skey, sessionkey, signedPublicKey(psKey), signedPublicKey(pAKey), signedPublicKey(pIKey), signedPublicKey(pDKey))
+  	   out(c, pk(skey)) |
+       pS(pk(skey),sessionkey,data, host, psKey) |
+       pA(sessionkey, pAKey) |
+       decAuth(skey, sessionkey, signedPublicKey(pIKey), pDKey) |
+       pICJ(sessionkey, signedPublicKey(psKey), pIKey) |
+       pTS(skey, sessionkey, signedPublicKey(psKey), signedPublicKey(pAKey), signedPublicKey(pIKey), signedPublicKey(pDKey)) |
+       pTI(skey, sessionkey, signedPublicKey(psKey), signedPublicKey(pAKey), signedPublicKey(pIKey), signedPublicKey(pDKey))
   	)
   )
