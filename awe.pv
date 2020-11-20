@@ -71,8 +71,10 @@ query data:bitstring, host:id, data':bitstring, host':id, data'':bitstring, host
   (*event (KOt(data, host, data, host, data, host));
   event (OKt(data, host, data, host, data, host)).*)
 
+(*
 query a:bitstring;
   event (decryptionReceived(a)) ==> event (decryptionStarted(a)).
+*)
 
 (* data Source *)
 let pS(mpk:mkp, sessionkey:sessionid, data:bitstring, host:id, pSKey:secretKey)=
@@ -136,6 +138,7 @@ let pT(skey:skp, sessionkey:sessionid, psKey:publicKey, pAKey:publicKey, pIKey:p
   if(ctS<>ct_signedS) || (host_signedS<>hostS) then
     event BlameA(dataS, hostS, decIBE(ct_signedS, getSki(skey, hostS)), host_signedS) ; event NoBlameA(dataS, hostS) ; event NoBlameC(dataD, hostD).
 
+
   (* if a = b
   if (dataS = dataI && hostS = hostI) then
     if (dataI = dataD && hostI = hostD) then event OKt(dataS, hostS, dataI, hostI, dataD, hostD)
@@ -147,8 +150,6 @@ let pT(skey:skp, sessionkey:sessionid, psKey:publicKey, pAKey:publicKey, pIKey:p
         event BlameB(data, host, dataI, hostI) ; event NoBlameA(data, host) ; event NoBlameC(dataD, hostD)
       else *)
       (*event KOt(dataS, hostS, dataI, hostI, dataD, hostD).*)
-
-
 
 (* Tester *)
 let py(skey:skp, sessionkey:sessionid) =
