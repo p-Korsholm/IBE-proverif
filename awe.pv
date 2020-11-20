@@ -1,10 +1,10 @@
 channel c.
-free SI: channel.
+free SI: channel[private].
 free ID: channel[private].
 free IA: channel[private].
 free DA: channel[private].
 
-free ST: channel.
+free ST: channel[private].
 free IT: channel[private].
 free DT: channel[private].
 
@@ -17,6 +17,7 @@ type ski.
 type secretKey.
 type publicKey.
 
+(* IBE *)
 fun pk(skp): mkp.
 
 fun encIBE(mkp, id, bitstring) : bitstring.
@@ -66,8 +67,9 @@ query event (endA()).
 query data:bitstring, host:id, data':bitstring, host':id, data'':bitstring, host'':id;
   event (BlameA(data', host', data, host));
   event (BlameB(data, host, data', host'));
-  event (BlameC(data, host, data'', host''));
-  event (KOt(data, host, data, host, data, host)).
+  event (BlameC(data, host, data'', host'')).
+  (*event (KOt(data, host, data, host, data, host));
+  event (OKt(data, host, data, host, data, host)).*)
 
 query a:bitstring;
   event (decryptionReceived(a)) ==> event (decryptionStarted(a)).
@@ -78,7 +80,6 @@ let pS(mpk:mkp, sessionkey:sessionid, data:bitstring, host:id, pSKey:secretKey)=
   out(c, pkey);
   let ct = encIBE(mpk, host, data) in
   out(ST, (ct, host, sessionkey));
-  (*event decryptionStarted(data);*)
   out(SI, sign((ct, host, sessionkey), pSKey));
   event endS().
 
@@ -88,10 +89,13 @@ let pICJ(sessionkey:sessionid, Spkey:publicKey, pIKey:secretKey)=
   out(c, pkey);
   in(SI, m:bitstring);
   let (ct:bitstring, host: id, =sessionkey) = checksign(m, Spkey) in
+
   out(IT, (ct, host, sessionkey, m));
   out(IA, (ct, host, sessionkey));
   out(ID, (ct, host, sessionkey));
+
   in(ID, (skeyi:ski, =sessionkey));
+
   event endICJ().
 
 let decAuth(skey:skp, sessionkey:sessionid, Ipkey:publicKey, pDKey:secretKey)=
