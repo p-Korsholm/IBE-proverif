@@ -66,30 +66,30 @@ query a:bitstring;
 let pS(mpk:mkp, sessionkey:sessionid) =
   new data: bitstring;
   new host: id;
-  out(ST, (data, host, sessionkey));
   let ct = encIBE(mpk, host, data) in
+  out(ST, (ct, host, sessionkey));
   (*event decryptionStarted(data);*)
-  out(SI, (ct, host));
+  out(SI, (ct, host, sessionkey));
   event endS().
 
 (* Investigator, Judge, Court *)
 let pICJ(sessionkey:sessionid) =
-  in(SI, (ct:bitstring, host: id));
+  in(SI, (ct:bitstring, host: id, =sessionkey));
   out(IT, (ct, host, sessionkey));
-  out(IA, (ct, host));
-  out(ID, (ct, host));
-  in(ID, skeyi:ski);
+  out(IA, (ct, host, sessionkey));
+  out(ID, (ct, host, sessionkey));
+  in(ID, (skeyi:ski, =sessionkey));
   let x = decIBE(ct, skeyi) in
     event decryptionReceived(x);
   event endICJ().
 
 let decAuth(skey:skp, sessionkey:sessionid) =
-  in(ID, (ct:bitstring, host:id));
+  in(ID, (ct:bitstring, host:id, =sessionkey));
   out(DT, (ct, host, sessionkey));
-  out(DA, (ct, host));
+  out(DA, (ct, host, sessionkey));
   in(DA, exists:bool);
   if exists then
-    out(ID, getSki(skey, host));
+    out(ID, (getSki(skey, host), sessionkey));
   event endDecAuth().
 
 
@@ -103,8 +103,8 @@ let decAuth(skey:skp, sessionkey:sessionid) =
    *)
 (* Auditor *)
 let pA(sessionkey:sessionid)=
-  in(IA, (ct:bitstring, host:id));
-  in(DA, (ct':bitstring, host':id));
+  in(IA, (ct:bitstring, host:id, =sessionkey));
+  in(DA, (ct':bitstring, host':id, =sessionkey));
   if (ct <> ct') && (host<> host') then
     out(DA, false)
   else
@@ -113,7 +113,7 @@ let pA(sessionkey:sessionid)=
   event endA().
 
   (* Tester *)
-let py(skey:skp, sessionkey:sessionid) =
+let pT(skey:skp, sessionkey:sessionid) =
   in(ST, (ct:bitstring, host:id, =sessionkey));
   in(IT, (ct':bitstring, host':id, =sessionkey));
   in(DT, (ct'':bitstring, host'':id, =sessionkey));
@@ -134,7 +134,7 @@ let py(skey:skp, sessionkey:sessionid) =
       event KOt(data, host, data', host', data'', host'').
 
 (* Tester *)
-let pT(skey:skp, sessionkey:sessionid) =
+let py(skey:skp, sessionkey:sessionid) =
   in(ST, (ct:bitstring, host:id, =sessionkey));
   0.
 
