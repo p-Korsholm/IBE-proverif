@@ -76,7 +76,7 @@ query a:bitstring;
 *)
 
 (* data Source *)
-let pS(mpk:mkp, sessionkey:sessionid, data:bitstring, host:id, pSKey:secretKey)=
+let pS(mpk:mkp, sessionkey:sessionid, data:bitstring, host:id, pSKey:secretKey) =
   let pkey = signedPublicKey(pSKey) in
   out(c, pkey);
   let ct = encIBE(mpk, host, data) in
@@ -85,7 +85,7 @@ let pS(mpk:mkp, sessionkey:sessionid, data:bitstring, host:id, pSKey:secretKey)=
   event endS().
 
 (* Investigator, Judge, Court *)
-let pICJ(sessionkey:sessionid, Spkey:publicKey, pIKey:secretKey)=
+let pICJ(sessionkey:sessionid, Spkey:publicKey, pIKey:secretKey) =
   let pkey = signedPublicKey(pIKey) in
   out(c, pkey);
   in(SI, m:bitstring);
@@ -106,13 +106,14 @@ let decAuth(skey:skp, sessionkey:sessionid, Ipkey:publicKey, pDKey:secretKey)=
   in(ID, m:bitstring);
 
   let (ct:bitstring, host:id, =sessionkey) = checksign(m, Ipkey) in
-
-  out(DT, (ct, host, sessionkey, m));
-  out(DA, (ct, host, sessionkey));
+  (
+    out(DT, (ct, host, sessionkey, m)) |
+    out(DA, (ct, host, sessionkey))
+  );
 
   in(DA, exists:bool);
   if exists then
-    out(ID, sign((getSki(skey, host), sessionkey), pDKey));
+    out(ID, (getSki(skey, host), sessionkey));
   event endDecAuth().
 
 (* Auditor *)
@@ -139,10 +140,13 @@ let pT(skey:skp, sessionkey:sessionid, psKey:publicKey, pAKey:publicKey, pIKey:p
   let dataD:bitstring = decIBE(ctD, getSki(skey, hostD)) in
 
   let (ct_signedS:bitstring, host_signedS: id, sessionkey:sessionid) = checksign(mS, psKey) in
-  if(ctS<>ct_signedS) || (host_signedS<>hostS) then
-    event BlameA(dataS, hostS, decIBE(ct_signedS, getSki(skey, hostS)), host_signedS) ; event NoBlameB(dataS, hostS) ; event NoBlameC(dataD, hostD);
-
   let (ct_signedI:bitstring, host_signedI: id, sessionkey:sessionid) = checksign(mI, pIKey) in
+
+  (* if(ctS<>ct_signedS) || (host_signedS<>hostS) then
+    event BlameA(dataS, hostS, decIBE(ct_signedS, getSki(skey, hostS)), host_signedS) ; event NoBlameB(dataS, hostS) ; event NoBlameC(dataD, hostD)
+  else
+    event NoBlameA(dataS, hostS); *)
+
   if(ctI<>ct_signedI) || (host_signedI<>hostI) then
     event BlameB(dataI, hostI, decIBE(ct_signedI, getSki(skey, hostI)), host_signedI) ; event NoBlameA(dataS, hostS) ; event NoBlameC(dataD, hostD).
 
@@ -170,7 +174,11 @@ process
      new host:id;
      new sessionkey:sessionid;
     (
-  	   out(c, pk(skey)) | pS(pk(skey),sessionkey,data, host, psKey) | pA(sessionkey, pAKey) | decAuth(skey, sessionkey, signedPublicKey(pIKey), pDKey) | pICJ(sessionkey, signedPublicKey(psKey), pIKey) |
+  	   out(c, pk(skey)) |
+       pS(pk(skey),sessionkey,data, host, psKey) |
+       pA(sessionkey, pAKey) |
+       decAuth(skey, sessionkey, signedPublicKey(pIKey), pDKey) |
+       pICJ(sessionkey, signedPublicKey(psKey), pIKey) |
        pT(skey, sessionkey, signedPublicKey(psKey), signedPublicKey(pAKey), signedPublicKey(pIKey), signedPublicKey(pDKey))
   	)
   )
